@@ -1,5 +1,7 @@
 package com.example;
 
+import com.example.impl.CustomerService;
+import com.example.model.Customer;
 import com.vaadin.data.Binder;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.spring.annotation.SpringUI;
@@ -7,6 +9,7 @@ import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
+
 
 @SpringUI
 public class VaadinUI extends UI {
