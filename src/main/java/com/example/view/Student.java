@@ -1,21 +1,25 @@
-package com.example;
+package com.example.view;
 
+import com.example.impl.ApplicationContextHolder;
 import com.example.impl.CustomerService;
 import com.example.model.Customer;
 import com.vaadin.data.Binder;
-import com.vaadin.server.VaadinRequest;
-import com.vaadin.spring.annotation.SpringUI;
-import com.vaadin.ui.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.vaadin.navigator.View;
+import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.Grid;
+import com.vaadin.ui.TextField;
+import com.vaadin.ui.VerticalLayout;
+import org.springframework.context.ApplicationContext;
 
 import java.util.List;
 
 
-@SpringUI
-public class VaadinUI extends UI {
+public class Student extends VerticalLayout implements View {
 
-    @Autowired
-    private CustomerService service;
+    public static final String NAME = "Student";
+
+    private final ApplicationContext ctx;
 
     private Customer customer;
 
@@ -26,20 +30,23 @@ public class VaadinUI extends UI {
     private TextField lastName = new TextField("Last name");
     private Button save = new Button("Save", e -> saveCustomer());
 
-    @Override
-    protected void init(VaadinRequest request) {
+
+    public Student() {
+
+        ctx = ApplicationContextHolder.getApplicationContext();
+
+
         updateGrid();
         grid.setColumns("firstName", "lastName");
         grid.addSelectionListener(e -> updateForm());
 
         binder.bindInstanceFields(this);
 
-        VerticalLayout layout = new VerticalLayout(grid, firstName, lastName, save);
-        setContent(layout);
+        addComponents(grid, firstName, lastName, save);
     }
 
     private void updateGrid() {
-        List<Customer> customers = service.findAll();
+        List<Customer> customers = ctx.getBean(CustomerService.class).findAll();
         grid.setItems(customers);
         setFormVisible(false);
     }
@@ -61,8 +68,12 @@ public class VaadinUI extends UI {
     }
 
     private void saveCustomer() {
-        service.update(customer);
+        ctx.getBean(CustomerService.class).update(customer);
         updateGrid();
     }
 
+    @Override
+    public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
+
+    }
 }
