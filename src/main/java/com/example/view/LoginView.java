@@ -4,7 +4,6 @@ import com.example.impl.ApplicationContextHolder;
 import com.example.model.Authentication;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
-import com.vaadin.server.Page;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.*;
@@ -13,15 +12,15 @@ import com.vaadin.ui.Button.ClickListener;
 import org.springframework.context.ApplicationContext;
 
 
-@SpringView(name = LoginPage.NAME)
-public class LoginPage extends VerticalLayout implements View {
+@SpringView(name = LoginView.NAME)
+public class LoginView extends VerticalLayout implements View {
     public static final String NAME = "";
 
 
     private final ApplicationContext ctx;
 
 
-    public LoginPage() {
+    public LoginView() {
 
 
         ctx = ApplicationContextHolder.getApplicationContext();
@@ -49,9 +48,11 @@ public class LoginPage extends VerticalLayout implements View {
 
                 if (ctx.getBean(Authentication.class).authenticate(username.getValue(), password.getValue())) {
                     VaadinSession.getCurrent().setAttribute("user", username.getValue());
-                    getUI().getNavigator().addView(Student.NAME, Student.class);
-                    //getUI().getNavigator().addView(OtherSecurePage.NAME, OtherSecurePage.class);
-                    Page.getCurrent().setUriFragment("!" + Student.NAME);
+
+                    getUI().getNavigator().addView(MainView.NAME, MainView.class);
+
+                    getUI().getNavigator().navigateTo(MainView.NAME);
+
                 } else {
                     Notification.show("Invalid credentials", Notification.Type.ERROR_MESSAGE);
                 }

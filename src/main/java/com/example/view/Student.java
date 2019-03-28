@@ -17,7 +17,6 @@ import java.util.List;
 
 public class Student extends VerticalLayout implements View {
 
-    public static final String NAME = "Student";
 
     private final ApplicationContext ctx;
 

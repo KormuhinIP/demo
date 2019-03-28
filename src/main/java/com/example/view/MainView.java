@@ -1,23 +1,25 @@
-/*
 package com.example.view;
 
-
+import com.vaadin.navigator.View;
+import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.ComponentContainer;
 import com.vaadin.ui.CssLayout;
-import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.VerticalLayout;
 
- //* Dashboard MainView is a simple HorizontalLayout that wraps the menu on the
- //* left and creates a simple container for the navigator on the right.
+@SpringView(name = MainView.NAME)
+public class MainView extends VerticalLayout implements View {
+
+    public static final String NAME = "main";
 
 
-@SuppressWarnings("serial")
-public class MainView extends HorizontalLayout {
+
 
     public MainView() {
+
         setSizeFull();
         addStyleName("mainview");
         setSpacing(false);
-
         addComponent(new DashboardMenu());
 
         ComponentContainer content = new CssLayout();
@@ -28,5 +30,12 @@ public class MainView extends HorizontalLayout {
 
         new DashboardNavigator(content);
     }
+
+
+    @Override
+    public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
+
+    }
+
+
 }
-*/
