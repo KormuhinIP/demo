@@ -6,46 +6,25 @@ import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.MenuBar.MenuItem;
 import com.vaadin.ui.themes.ValoTheme;
 
 
-/**
- * A responsive menu component providing user information and the controls for
- * primary navigation between the views.
- */
+
 @SuppressWarnings({ "serial", "unchecked" })
 public final class DashboardMenu extends CustomComponent {
 
-    public static final String ID = "dashboard-menu";
-    public static final String REPORTS_BADGE_ID = "dashboard-menu-reports-badge";
-    public static final String NOTIFICATIONS_BADGE_ID = "dashboard-menu-notifications-badge";
+
     private static final String STYLE_VISIBLE = "valo-menu-visible";
-    private Label notificationsBadge;
-    private Label reportsBadge;
-    private MenuItem settingsItem;
+
 
     public DashboardMenu() {
         setPrimaryStyleName("valo-menu");
-        setId(ID);
         setSizeUndefined();
-
-        // There's only one DashboardMenu per UI so this doesn't need to be
-        // unregistered from the UI-scoped DashboardEventBus.
-        //  DashboardEventBus.register(this);
-
         setCompositionRoot(buildContent());
     }
 
     private Component buildContent() {
         final CssLayout menuContent = new CssLayout();
-        menuContent.addStyleName("sidebar");
-        menuContent.addStyleName(ValoTheme.MENU_PART);
-        menuContent.addStyleName("no-vertical-drag-hints");
-        menuContent.addStyleName("no-horizontal-drag-hints");
-        menuContent.setWidth(null);
-        menuContent.setHeight("100%");
-
         menuContent.addComponent(buildTitle());
         menuContent.addComponent(buildToggleButton());
         menuContent.addComponent(buildMenuItems());
@@ -93,16 +72,6 @@ public final class DashboardMenu extends CustomComponent {
 
         for (final DashboardViewType view : DashboardViewType.values()) {
             Component menuItemComponent = new ValoMenuItemButton(view);
-
-
-            if (view == DashboardViewType.STUDENTS) {
-                notificationsBadge = new Label();
-                notificationsBadge.setId(NOTIFICATIONS_BADGE_ID);
-                menuItemComponent = buildBadgeWrapper(menuItemComponent,
-                        notificationsBadge);
-            }
-
-
             menuItemsLayout.addComponent(menuItemComponent);
         }
         return menuItemsLayout;
@@ -126,8 +95,6 @@ public final class DashboardMenu extends CustomComponent {
 
     public final class ValoMenuItemButton extends Button {
 
-        private static final String STYLE_SELECTED = "selected";
-
         private final DashboardViewType view;
 
         public ValoMenuItemButton(final DashboardViewType view) {
@@ -136,8 +103,10 @@ public final class DashboardMenu extends CustomComponent {
             setIcon(view.getIcon());
             setCaption(view.getViewName().substring(0, 1).toUpperCase()
                     + view.getViewName().substring(1));
-            //  DashboardEventBus.register(this);
             addClickListener(new ClickListener() {
+
+
+
                 @Override
                 public void buttonClick(final ClickEvent event) {
                     UI.getCurrent().getNavigator()

@@ -42,6 +42,7 @@ public class Student extends VerticalLayout implements View {
         binder.bindInstanceFields(this);
 
         addComponents(grid, firstName, lastName, save);
+
     }
 
     private void updateGrid() {

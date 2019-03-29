@@ -5,10 +5,10 @@ import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.ComponentContainer;
 import com.vaadin.ui.CssLayout;
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.HorizontalLayout;
 
 @SpringView(name = MainView.NAME)
-public class MainView extends VerticalLayout implements View {
+public class MainView extends HorizontalLayout implements View {
 
     public static final String NAME = "main";
 
