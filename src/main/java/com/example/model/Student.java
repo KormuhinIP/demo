@@ -1,12 +1,12 @@
 package com.example.model;
 
-public class Customer {
+public class Student {
 
     private Long id;
 
     private String firstName, lastName;
 
-    public Customer(Long id, String firstName, String lastName) {
+    public Student(Long id, String firstName, String lastName) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;

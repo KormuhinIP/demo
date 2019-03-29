@@ -1,8 +1,8 @@
 package com.example.view;
 
 import com.example.impl.ApplicationContextHolder;
-import com.example.impl.CustomerService;
-import com.example.model.Customer;
+import com.example.impl.StudentService;
+import com.example.model.Student;
 import com.vaadin.data.Binder;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
@@ -15,22 +15,22 @@ import org.springframework.context.ApplicationContext;
 import java.util.List;
 
 
-public class Student extends VerticalLayout implements View {
+public class StudentView extends VerticalLayout implements View {
 
 
     private final ApplicationContext ctx;
 
-    private Customer customer;
+    private Student customer;
 
-    private Binder<Customer> binder = new Binder<>(Customer.class);
+    private Binder<Student> binder = new Binder<>(Student.class);
 
-    private Grid<Customer> grid = new Grid(Customer.class);
+    private Grid<Student> grid = new Grid(Student.class);
     private TextField firstName = new TextField("First name");
     private TextField lastName = new TextField("Last name");
     private Button save = new Button("Save", e -> saveCustomer());
 
 
-    public Student() {
+    public StudentView() {
 
         ctx = ApplicationContextHolder.getApplicationContext();
 
@@ -46,7 +46,7 @@ public class Student extends VerticalLayout implements View {
     }
 
     private void updateGrid() {
-        List<Customer> customers = ctx.getBean(CustomerService.class).findAll();
+        List<Student> customers = ctx.getBean(StudentService.class).findAll();
         grid.setItems(customers);
         setFormVisible(false);
     }
@@ -68,7 +68,7 @@ public class Student extends VerticalLayout implements View {
     }
 
     private void saveCustomer() {
-        ctx.getBean(CustomerService.class).update(customer);
+        ctx.getBean(StudentService.class).update(customer);
         updateGrid();
     }
 

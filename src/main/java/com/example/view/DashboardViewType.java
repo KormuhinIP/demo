@@ -6,7 +6,8 @@ import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Resource;
 
 public enum DashboardViewType {
-    STUDENTS("student", Student.class, FontAwesome.HOME, true);
+    STUDENTS("students", StudentView.class, FontAwesome.TABLE, true),
+    EXAMS("exams", ExamView.class, FontAwesome.TABLE, true);
 
     private final String viewName;
     private final Class<? extends View> viewClass;
