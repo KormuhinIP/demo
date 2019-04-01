@@ -45,6 +45,11 @@
 			<scope>test</scope>
 		</dependency>
 
+        <dependency>
+            <groupId>com.vaadin.addon</groupId>
+            <artifactId>pagination</artifactId>
+            <version>8.0.6</version>
+        </dependency>
 
 	</dependencies>
 
@@ -60,7 +65,15 @@
 		</dependencies>
 	</dependencyManagement>
 
-	<build>
+
+    <repositories>
+        <repository>
+            <id>vaadin-addons</id>
+            <url>http://maven.vaadin.com/vaadin-addons</url>
+        </repository>
+    </repositories>
+
+    <build>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>

@@ -25,7 +25,6 @@ public class LoginView extends VerticalLayout implements View {
 
         ctx = ApplicationContextHolder.getApplicationContext();
 
-
         Panel panel = new Panel("Login");
         panel.setSizeUndefined();
         addComponent(panel);
