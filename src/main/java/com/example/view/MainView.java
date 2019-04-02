@@ -1,5 +1,7 @@
 package com.example.view;
 
+import com.example.component.DashboardMenu;
+import com.example.component.DashboardNavigator;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.spring.annotation.SpringView;

@@ -39,11 +39,11 @@ public class Student {
         this.lastName = lastName;
     }
 
-    public Student(Long id, String firstName, String lastName, String photo, String patronymic, String phone, Date birthDay, boolean license) {
+    public Student(Long id, String photo, String lastName, String firstName, String patronymic, String phone, Date birthDay, boolean license) {
         this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
         this.photo = photo;
+        this.lastName = lastName;
+        this.firstName = firstName;
         this.patronymic = patronymic;
         this.phone = phone;
         this.birthDay = birthDay;

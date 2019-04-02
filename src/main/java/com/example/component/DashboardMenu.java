@@ -1,6 +1,7 @@
-package com.example.view;
+package com.example.component;
 
 
+import com.example.view.DashboardViewType;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.*;

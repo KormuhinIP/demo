@@ -12,4 +12,6 @@ public interface StudentDao {
     public void delete(Student customer);
 
     public void update(Student customer);
+
+    public List<Student> findByName(String name);
 }
