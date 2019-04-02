@@ -60,7 +60,7 @@ public class StudentService implements StudentDao {
         public Student mapRow(ResultSet rs, int rowNum) throws SQLException {
             return new Student(rs.getLong("id"), rs.getString("photo"), rs.getString("last_name"),
                     rs.getString("first_name"), rs.getString("patronymic"), rs.getString("phone"),
-                    rs.getDate("birthDay"), rs.getBoolean("license"));
+                    rs.getDate("birthDay"), rs.getString("license"));
         }
     }
 

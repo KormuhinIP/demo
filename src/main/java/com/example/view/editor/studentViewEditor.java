@@ -1,7 +1,10 @@
 package com.example.view.editor;
 
+import com.example.component.StatusLicenseEnum;
 import com.example.model.Student;
 import com.vaadin.ui.*;
+
+import java.time.LocalDate;
 
 public class studentViewEditor {
 
@@ -25,26 +28,32 @@ public class studentViewEditor {
         layout.addComponent(downloadPhotoText);
 
         TextField lastNameText = new TextField("Last Name");
+        lastNameText.setValue(student == null ? "" : student.getLastName());
         layout.addComponent(lastNameText);
 
         TextField firstNameText = new TextField("First Name");
+        firstNameText.setValue(student == null ? "" : student.getFirstName());
         layout.addComponent(firstNameText);
 
         TextField patronymicText = new TextField("Patronymic");
+        patronymicText.setValue(student == null ? "" : student.getPatronymic());
         layout.addComponent(patronymicText);
 
-        TextField PhoneText = new TextField("Phone");
-        layout.addComponent(PhoneText);
+        TextField phoneText = new TextField("Phone");
+        phoneText.setValue(student == null ? "" : student.getPhone());
+        layout.addComponent(phoneText);
 
         DateField birthDayText = new DateField("Birth Day");
+        birthDayText.setValue(student == null ? null : LocalDate.parse(String.valueOf(student.getBirthDay())));
         layout.addComponent(birthDayText);
 
         ComboBox licenseSelect = new ComboBox("License");
-
+        licenseSelect.setValue(student == null ? null : student.getLicense());
+        licenseSelect.setItems(StatusLicenseEnum.YES.getTitle(), StatusLicenseEnum.NO.getTitle());
+        licenseSelect.setEmptySelectionAllowed(false);
         layout.addComponent(licenseSelect);
 
-
-        createButton();
+        ButtonBild();
 
         layout.addComponent(hlayout);
         sub.setContent(layout);
@@ -52,7 +61,7 @@ public class studentViewEditor {
     }
 
 
-    public void createButton() {
+    public void ButtonBild() {
 
         Button buttonOk = new Button("OK");
         buttonOk.addClickListener(new Button.ClickListener() {

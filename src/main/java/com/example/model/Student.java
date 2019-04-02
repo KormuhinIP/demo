@@ -4,16 +4,25 @@ import java.util.Date;
 
 public class Student {
 
-
-    private String firstName, lastName, photo, patronymic, phone;
-    private Date birthDay;
-    private boolean license;
-
-
     private Long id;
+    private String firstName, lastName, photo, patronymic, phone, license;
+    private Date birthDay;
 
     public Student() {
     }
+
+
+    public Student(Long id, String photo, String lastName, String firstName, String patronymic, String phone, Date birthDay, String license) {
+        this.id = id;
+        this.photo = photo;
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.patronymic = patronymic;
+        this.phone = phone;
+        this.birthDay = birthDay;
+        this.license = license;
+    }
+
 
     public Long getId() {
         return id;
@@ -37,17 +46,6 @@ public class Student {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    public Student(Long id, String photo, String lastName, String firstName, String patronymic, String phone, Date birthDay, boolean license) {
-        this.id = id;
-        this.photo = photo;
-        this.lastName = lastName;
-        this.firstName = firstName;
-        this.patronymic = patronymic;
-        this.phone = phone;
-        this.birthDay = birthDay;
-        this.license = license;
     }
 
     public String getPhoto() {
@@ -82,11 +80,11 @@ public class Student {
         this.birthDay = birthDay;
     }
 
-    public boolean isLicense() {
+    public String getLicense() {
         return license;
     }
 
-    public void setLicense(boolean license) {
+    public void setLicense(String license) {
         this.license = license;
     }
 

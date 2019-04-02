@@ -63,10 +63,16 @@ public class StudentView extends VerticalLayout implements View {
 
 
     private void buttonBild() {
-        Button add = new Button("add in");
+
+        horizontalLayout = new HorizontalLayout();
+
+
+        Button add = new Button("add in", e -> {
+            new studentViewEditor(null);
+        });
+
 
         Button delete = new Button("delete");
-        horizontalLayout = new HorizontalLayout();
 
 
         Button edit = new Button("edit", e -> {
