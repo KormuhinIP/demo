@@ -5,7 +5,7 @@ import java.util.Date;
 public class Exam {
 
     private Long id;
-    private Date date;
+    private Date dateExam;
     private Student student;
     private String kindExam, comment, evaluation;
 
@@ -13,9 +13,9 @@ public class Exam {
     public Exam() {
     }
 
-    public Exam(Long id, Date date, Student student, String kindExam, String comment, String evaluation) {
+    public Exam(Long id, Date dateExam, Student student, String kindExam, String comment, String evaluation) {
         this.id = id;
-        this.date = date;
+        this.dateExam = dateExam;
         this.student = student;
         this.kindExam = kindExam;
         this.comment = comment;
@@ -30,12 +30,12 @@ public class Exam {
         this.id = id;
     }
 
-    public Date getDate() {
-        return date;
+    public Date getDateExam() {
+        return dateExam;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setDateExam(Date dateExam) {
+        this.dateExam = dateExam;
     }
 
     public Student getStudent() {
@@ -69,4 +69,6 @@ public class Exam {
     public void setEvaluation(String evaluation) {
         this.evaluation = evaluation;
     }
+
+
 }
