@@ -6,6 +6,8 @@ public class Student {
 
     private Long id;
     private String firstName, lastName, photo, patronymic, phone, license;
+
+
     private Date birthDay;
 
     public Student() {
@@ -72,13 +74,6 @@ public class Student {
         this.phone = phone;
     }
 
-    public Date getBirthDay() {
-        return birthDay;
-    }
-
-    public void setBirthDay(Date birthDay) {
-        this.birthDay = birthDay;
-    }
 
     public String getLicense() {
         return license;
@@ -88,8 +83,12 @@ public class Student {
         this.license = license;
     }
 
+    public Date getBirthDay() {
+        return birthDay;
+    }
 
-
-
+    public void setBirthDay(Date birthDay) {
+        this.birthDay = birthDay;
+    }
 
 }

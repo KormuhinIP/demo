@@ -13,14 +13,16 @@ import com.vaadin.server.ThemeResource;
 import com.vaadin.shared.ui.ValueChangeMode;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Grid.Column;
+import com.vaadin.ui.renderers.DateRenderer;
 import com.vaadin.ui.renderers.ImageRenderer;
+import com.vaadin.ui.renderers.Renderer;
 import org.springframework.context.ApplicationContext;
 
 import java.util.List;
 
 public class StudentView extends VerticalLayout implements View {
 
-    private final ApplicationContext ctx;
+    private ApplicationContext ctx;
     private List<Student> studentsList;
     private Pagination pagination;
     private Grid<Student> grid;
@@ -34,6 +36,7 @@ public class StudentView extends VerticalLayout implements View {
         studentsList = ctx.getBean(StudentService.class).findAll();
         grid = new Grid<>(Student.class);
 
+
         showStudent("");
 
         createFilter();
@@ -41,6 +44,8 @@ public class StudentView extends VerticalLayout implements View {
 
 
         grid.setColumns("lastName", "firstName", "patronymic", "phone", "birthDay", "license");
+
+        grid.getColumn("birthDay").setRenderer((Renderer) (new DateRenderer("%1$td-%1$tm-%1$tY")));
 
         Column<Student, ThemeResource> imageColum = grid.addColumn(p -> new ThemeResource("img/" + p.getPhoto() + ".jpg"),
                 new ImageRenderer()).setCaption("Photo").setWidth(100);
@@ -68,7 +73,7 @@ public class StudentView extends VerticalLayout implements View {
 
 
         Button add = new Button("add in", e -> {
-            new studentViewEditor(null);
+            new studentViewEditor(new Student(), grid);
         });
 
 
@@ -77,7 +82,7 @@ public class StudentView extends VerticalLayout implements View {
 
         Button edit = new Button("edit", e -> {
             if (grid.asSingleSelect().getValue() != null) {
-                new studentViewEditor(grid.asSingleSelect().getValue());
+                new studentViewEditor(grid.asSingleSelect().getValue(), grid);
             }
         });
 

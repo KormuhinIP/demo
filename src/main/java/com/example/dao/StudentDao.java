@@ -7,11 +7,11 @@ import java.util.List;
 public interface StudentDao {
     public List<Student> findAll();
 
-    public void save(Student customer);
+    public void save(Student student);
 
-    public void delete(Student customer);
+    public void delete(Student student);
 
-    public void update(Student customer);
+    public void update(Student student);
 
     public List<Student> findByName(String name);
 }
