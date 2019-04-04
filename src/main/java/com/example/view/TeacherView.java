@@ -1,54 +1,48 @@
 package com.example.view;
 
 import com.example.impl.ApplicationContextHolder;
-import com.example.impl.StudentService;
-import com.example.model.Student;
-import com.example.view.editor.StudentViewEditor;
+import com.example.impl.TeacherService;
+import com.example.model.Teacher;
+import com.example.view.editor.TeacherViewEditor;
 import com.vaadin.addon.pagination.Pagination;
 import com.vaadin.addon.pagination.PaginationChangeListener;
 import com.vaadin.addon.pagination.PaginationResource;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
-import com.vaadin.server.ThemeResource;
 import com.vaadin.shared.ui.ValueChangeMode;
 import com.vaadin.ui.*;
 import com.vaadin.ui.renderers.DateRenderer;
-import com.vaadin.ui.renderers.ImageRenderer;
 import com.vaadin.ui.renderers.Renderer;
 import org.springframework.context.ApplicationContext;
 
 import java.util.List;
 
-public class StudentView extends VerticalLayout implements View {
+public class TeacherView extends VerticalLayout implements View {
 
     private ApplicationContext ctx;
-    private List<Student> studentsList;
+    private List<Teacher> teachersList;
     private Pagination pagination;
-    private Grid<Student> grid;
+    private Grid<Teacher> grid;
     private HorizontalLayout horizontalLayout;
     private TextField filter;
 
 
-    public StudentView() {
+    public TeacherView() {
 
         ctx = ApplicationContextHolder.getApplicationContext();
-        studentsList = ctx.getBean(StudentService.class).findAll();
-        grid = new Grid<>(Student.class);
+        teachersList = ctx.getBean(TeacherService.class).findAll();
+        grid = new Grid<>(Teacher.class);
 
 
-        showStudent("");
+        showTeacher("");
 
         createFilter();
-        filter.addValueChangeListener(e -> showStudent(e.getValue()));
+        filter.addValueChangeListener(e -> showTeacher(e.getValue()));
 
 
-        grid.setColumns("lastName", "firstName", "patronymic", "phone", "birthDay", "license");
+        grid.setColumns("lastName", "firstName", "patronymic", "birthDay", "experience", "numberLicense");
 
         grid.getColumn("birthDay").setRenderer((Renderer) (new DateRenderer("%1$td-%1$tm-%1$tY")));
-
-        grid.setColumnOrder(grid.addColumn(p -> new ThemeResource("img/" + p.getPhoto() + ".jpg"),
-                new ImageRenderer()).setCaption("Photo").setWidth(100));
-
 
         setHeight("100%");
         grid.setHeight("100%");
@@ -71,7 +65,7 @@ public class StudentView extends VerticalLayout implements View {
 
 
         Button add = new Button("add in", e -> {
-            new StudentViewEditor(new Student(), grid);
+            new TeacherViewEditor(new Teacher(), grid);
         });
 
 
@@ -80,7 +74,7 @@ public class StudentView extends VerticalLayout implements View {
 
         Button edit = new Button("edit", e -> {
             if (grid.asSingleSelect().getValue() != null) {
-                new StudentViewEditor(grid.asSingleSelect().getValue(), grid);
+                new TeacherViewEditor(grid.asSingleSelect().getValue(), grid);
             }
         });
 
@@ -96,17 +90,17 @@ public class StudentView extends VerticalLayout implements View {
         filter.setValueChangeMode(ValueChangeMode.EAGER);
     }
 
-    private void showStudent(String name) {
+    private void showTeacher(String name) {
         if (name.equals("")) {
-            createPagination(studentsList);
+            createPagination(teachersList);
         } else {
-            List<Student> list = ctx.getBean(StudentService.class).findByName(name);
+            List<Teacher> list = ctx.getBean(TeacherService.class).findByName(name);
             createPagination(list);
         }
     }
 
 
-    private void createPagination(List<Student> list) {
+    private void createPagination(List<Teacher> list) {
 
         if (list.size() < 10) {
             grid.setItems(list);

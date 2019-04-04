@@ -1,53 +1,48 @@
 package com.example.view;
 
 import com.example.impl.ApplicationContextHolder;
-import com.example.impl.StudentService;
-import com.example.model.Student;
-import com.example.view.editor.StudentViewEditor;
+import com.example.impl.PaymentService;
+import com.example.model.Payment;
 import com.vaadin.addon.pagination.Pagination;
 import com.vaadin.addon.pagination.PaginationChangeListener;
 import com.vaadin.addon.pagination.PaginationResource;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
-import com.vaadin.server.ThemeResource;
 import com.vaadin.shared.ui.ValueChangeMode;
 import com.vaadin.ui.*;
 import com.vaadin.ui.renderers.DateRenderer;
-import com.vaadin.ui.renderers.ImageRenderer;
 import com.vaadin.ui.renderers.Renderer;
 import org.springframework.context.ApplicationContext;
 
 import java.util.List;
 
-public class StudentView extends VerticalLayout implements View {
+public class PaymentView extends VerticalLayout implements View {
+
 
     private ApplicationContext ctx;
-    private List<Student> studentsList;
+    private List<Payment> paymentsList;
     private Pagination pagination;
-    private Grid<Student> grid;
+    private Grid<Payment> grid;
     private HorizontalLayout horizontalLayout;
     private TextField filter;
 
 
-    public StudentView() {
+    public PaymentView() {
 
         ctx = ApplicationContextHolder.getApplicationContext();
-        studentsList = ctx.getBean(StudentService.class).findAll();
-        grid = new Grid<>(Student.class);
+        paymentsList = ctx.getBean(PaymentService.class).findAll();
+        grid = new Grid<>(Payment.class);
 
 
-        showStudent("");
+        showPayment("");
 
         createFilter();
-        filter.addValueChangeListener(e -> showStudent(e.getValue()));
+        filter.addValueChangeListener(e -> showPayment(e.getValue()));
 
 
-        grid.setColumns("lastName", "firstName", "patronymic", "phone", "birthDay", "license");
-
-        grid.getColumn("birthDay").setRenderer((Renderer) (new DateRenderer("%1$td-%1$tm-%1$tY")));
-
-        grid.setColumnOrder(grid.addColumn(p -> new ThemeResource("img/" + p.getPhoto() + ".jpg"),
-                new ImageRenderer()).setCaption("Photo").setWidth(100));
+        grid.setColumns("paymentDate", "sumPayment");
+        grid.setColumnOrder(grid.addColumn(item -> (item.getStudent().getLastName())).setCaption("Student"));
+        grid.getColumn("paymentDate").setRenderer((Renderer) (new DateRenderer("%1$td-%1$tm-%1$tY")));
 
 
         setHeight("100%");
@@ -71,7 +66,7 @@ public class StudentView extends VerticalLayout implements View {
 
 
         Button add = new Button("add in", e -> {
-            new StudentViewEditor(new Student(), grid);
+
         });
 
 
@@ -80,7 +75,7 @@ public class StudentView extends VerticalLayout implements View {
 
         Button edit = new Button("edit", e -> {
             if (grid.asSingleSelect().getValue() != null) {
-                new StudentViewEditor(grid.asSingleSelect().getValue(), grid);
+
             }
         });
 
@@ -96,17 +91,17 @@ public class StudentView extends VerticalLayout implements View {
         filter.setValueChangeMode(ValueChangeMode.EAGER);
     }
 
-    private void showStudent(String name) {
+    private void showPayment(String name) {
         if (name.equals("")) {
-            createPagination(studentsList);
+            createPagination(paymentsList);
         } else {
-            List<Student> list = ctx.getBean(StudentService.class).findByName(name);
+            List<Payment> list = ctx.getBean(PaymentService.class).findByName(name);
             createPagination(list);
         }
     }
 
 
-    private void createPagination(List<Student> list) {
+    private void createPagination(List<Payment> list) {
 
         if (list.size() < 10) {
             grid.setItems(list);
@@ -128,7 +123,6 @@ public class StudentView extends VerticalLayout implements View {
             }
         });
     }
-
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {

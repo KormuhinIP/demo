@@ -14,7 +14,7 @@ import com.vaadin.ui.*;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 
-public class studentViewEditor {
+public class StudentViewEditor {
 
 
     BeanValidationBinder<Student> binder;
@@ -27,7 +27,7 @@ public class studentViewEditor {
     Grid grid;
 
 
-    public studentViewEditor(Student student, Grid grid) {
+    public StudentViewEditor(Student student, Grid grid) {
 
 
         this.student = student;
@@ -90,8 +90,8 @@ public class studentViewEditor {
         layout.addComponent(birthDay);
 
         ComboBox licenseSelect = new ComboBox("License");
-        licenseSelect.setValue(student.getLicense() == null ? null : student.getLicense());
-        licenseSelect.setItems(StatusLicenseEnum.YES.getTitle(), StatusLicenseEnum.NO.getTitle());
+        licenseSelect.setValue(student.getLicense());
+        licenseSelect.setItems(StatusLicenseEnum.getTitles());
         licenseSelect.setEmptySelectionAllowed(false);
         binder.bind(licenseSelect, Student::getLicense, Student::setLicense);
         layout.addComponent(licenseSelect);

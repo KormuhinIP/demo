@@ -2,6 +2,7 @@ package com.example.dao;
 
 import com.example.model.Exam;
 
+import java.util.Date;
 import java.util.List;
 
 public interface ExamDao {
@@ -13,5 +14,5 @@ public interface ExamDao {
 
     public void update(Exam exam);
 
-    public List<Exam> findByName(String name);
+    public List<Exam> findByDate(Date date);
 }

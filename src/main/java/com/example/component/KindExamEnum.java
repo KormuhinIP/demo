@@ -4,28 +4,28 @@ package com.example.component;
 import java.util.ArrayList;
 import java.util.List;
 
-public enum StatusLicenseEnum {
+public enum KindExamEnum {
 
-    YES("Yes"),
-    NO("No");
+    TEST("Test"),
+    AUTODROME("Autodrome"),
+    DRIVING("driving");
 
     private String title;
 
 
-    StatusLicenseEnum(final String title) {
+    KindExamEnum(final String title) {
         this.title = title;
+    }
+
+    public static List<String> getTitles() {
+        List<String> list = new ArrayList<>();
+        for (KindExamEnum value : values())
+            list.add(value.getTitle());
+        return list;
     }
 
     public String getTitle() {
         return this.title;
-    }
-
-
-    public static List<String> getTitles() {
-        List<String> list = new ArrayList<>();
-        for (StatusLicenseEnum value : values())
-            list.add(value.getTitle());
-        return list;
     }
 
 }

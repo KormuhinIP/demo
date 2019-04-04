@@ -3,18 +3,20 @@ package com.example.view;
 import com.example.impl.ApplicationContextHolder;
 import com.example.impl.ExamService;
 import com.example.model.Exam;
+import com.example.view.editor.ExamViewEditor;
 import com.vaadin.addon.pagination.Pagination;
 import com.vaadin.addon.pagination.PaginationChangeListener;
 import com.vaadin.addon.pagination.PaginationResource;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
-import com.vaadin.ui.Grid;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.TextField;
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.*;
+import com.vaadin.ui.renderers.DateRenderer;
+import com.vaadin.ui.renderers.Renderer;
 import org.springframework.context.ApplicationContext;
 
+import java.util.Date;
 import java.util.List;
+
 
 public class ExamView extends VerticalLayout implements View {
 
@@ -24,7 +26,7 @@ public class ExamView extends VerticalLayout implements View {
     private Pagination pagination;
     private Grid<Exam> grid;
     private HorizontalLayout horizontalLayout;
-    private TextField filter;
+    private DateField filter;
 
 
     public ExamView() {
@@ -34,43 +36,46 @@ public class ExamView extends VerticalLayout implements View {
         examsList = ctx.getBean(ExamService.class).findAll();
         grid = new Grid<>(Exam.class);
 
-        addComponent(grid);
+        showStudent(null);
 
-/*
+        createFilter();
 
-        showStudent("");
-
-       // createFilter();
-        filter.addValueChangeListener(e -> showStudent(e.getValue()));
+        filter.addValueChangeListener(e ->
+                showStudent(e.getValue() != null ? java.sql.Date.valueOf(e.getValue()) : null));
 
 
-        grid.setColumns("dataExam", "student", "kindExam", "comment", "evaluation");
-
-
+        grid.setColumns("dateExam", "kindExam", "comment", "evaluation");
+        grid.addColumn(item -> (item.getStudent().getLastName())).setCaption("Student");
+        grid.getColumn("dateExam").setRenderer((Renderer) (new DateRenderer("%1$td-%1$tm-%1$tY")));
 
         setHeight("100%");
         grid.setHeight("100%");
         grid.setRowHeight(64);
         grid.setWidth("100%");
 
-
-      //  buttonBild();
+        buttonBild();
 
         addComponents(filter, grid, pagination, horizontalLayout);
         setExpandRatio(grid, 1);
 
-*/
+
 
     }
 
 
-    private void showStudent(String name) {
-        if (name.equals("")) {
+    private void showStudent(Date date) {
+        if (date == null) {
             createPagination(examsList);
         } else {
-            List<Exam> list = ctx.getBean(ExamService.class).findByName(name);
+            List<Exam> list = ctx.getBean(ExamService.class).findByDate(date);
             createPagination(list);
         }
+    }
+
+
+    private void createFilter() {
+        filter = new DateField();
+        filter.setPlaceholder("input date");
     }
 
 
@@ -96,6 +101,31 @@ public class ExamView extends VerticalLayout implements View {
             }
         });
     }
+
+
+    private void buttonBild() {
+
+        horizontalLayout = new HorizontalLayout();
+
+
+        Button add = new Button("add in", e -> {
+            new ExamViewEditor(new Exam(), grid);
+        });
+
+
+        Button delete = new Button("delete");
+
+
+        Button edit = new Button("edit", e -> {
+            if (grid.asSingleSelect().getValue() != null) {
+                new ExamViewEditor(grid.asSingleSelect().getValue(), grid);
+            }
+        });
+
+
+        horizontalLayout.addComponents(add, edit, delete);
+    }
+
 
 
 

@@ -19,23 +19,29 @@ public class StudentService implements StudentDao {
     private NamedParameterJdbcTemplate jdbcTemplate;
 
 
+    @Override
     public List<Student> findAll() {
-        return jdbcTemplate.query("SELECT* FROM students", new StudentRowMapper());
+        String sql = "SELECT* FROM students";
+        return jdbcTemplate.query(sql, new StudentRowMapper());
+    }
+
+    @Override
+    public Student findById(long id) {
+        String sql = "SELECT* FROM students where id=:id";
+        MapSqlParameterSource source = new MapSqlParameterSource();
+        source.addValue("id", id);
+        return jdbcTemplate.queryForObject(sql, source, new StudentRowMapper());
     }
 
 
     @Override
     public List<Student> findByName(String name) {
-
-        String sql = "select * from students where concat(upper(last_name), ' ', upper(first_name),' ',upper(patronymic)) like :name";
+        String sql = "select * from students where concat(upper(lastName), ' ', upper(firstName),' ',upper(patronymic)) like :name";
         MapSqlParameterSource source = new MapSqlParameterSource();
         source.addValue("name", "%" + name.toUpperCase() + "%");
-
-
         return jdbcTemplate.query(sql, source, new StudentRowMapper());
 
     }
-
 
 
     @Override
@@ -58,8 +64,8 @@ public class StudentService implements StudentDao {
 
         @Override
         public Student mapRow(ResultSet rs, int rowNum) throws SQLException {
-            return new Student(rs.getLong("id"), rs.getString("photo"), rs.getString("last_name"),
-                    rs.getString("first_name"), rs.getString("patronymic"), rs.getString("phone"),
+            return new Student(rs.getLong("id"), rs.getString("photo"), rs.getString("lastName"),
+                    rs.getString("firstName"), rs.getString("patronymic"), rs.getString("phone"),
                     rs.getDate("birthDay"), rs.getString("license"));
         }
     }
