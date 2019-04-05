@@ -50,6 +50,12 @@
             <artifactId>pagination</artifactId>
             <version>8.0.6</version>
         </dependency>
+		<dependency>
+			<groupId>com.byteowls</groupId>
+			<artifactId>vaadin-chartjs</artifactId>
+			<version>1.4.0</version>
+		</dependency>
+
 
 	</dependencies>
 
@@ -62,6 +68,11 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
+			<dependency>
+				<groupId>com.byteowls</groupId>
+				<artifactId>vaadin-chartjs</artifactId>
+				<version>1.3.0</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
@@ -71,6 +82,14 @@
             <id>vaadin-addons</id>
             <url>http://maven.vaadin.com/vaadin-addons</url>
         </repository>
+		<repository>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<id>central</id>
+			<name>bintray</name>
+			<url>http://jcenter.bintray.com</url>
+		</repository>
     </repositories>
 
     <build>

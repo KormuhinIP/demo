@@ -4,17 +4,13 @@ import com.example.component.DashboardMenu;
 import com.example.component.DashboardNavigator;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
-import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.ComponentContainer;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.UI;
 
-@SpringView(name = MainView.NAME)
+
 public class MainView extends HorizontalLayout implements View {
-
-    public static final String NAME = "main";
-
-
 
 
     public MainView() {
@@ -31,6 +27,9 @@ public class MainView extends HorizontalLayout implements View {
         setExpandRatio(content, 1.0f);
 
         new DashboardNavigator(content);
+
+        UI.getCurrent().getNavigator()
+                .navigateTo(DashboardViewType.DASHBOARD.getViewName());
     }
 
 

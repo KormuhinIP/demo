@@ -12,9 +12,8 @@ import com.vaadin.ui.Button.ClickListener;
 import org.springframework.context.ApplicationContext;
 
 
-@SpringView(name = LoginView.NAME)
+@SpringView(name = "")
 public class LoginView extends VerticalLayout implements View {
-    public static final String NAME = "";
 
 
     private final ApplicationContext ctx;
@@ -48,9 +47,8 @@ public class LoginView extends VerticalLayout implements View {
                 if (ctx.getBean(Authentication.class).authenticate(username.getValue(), password.getValue())) {
                     VaadinSession.getCurrent().setAttribute("user", username.getValue());
 
-                    getUI().getNavigator().addView(MainView.NAME, MainView.class);
 
-                    getUI().getNavigator().navigateTo(MainView.NAME);
+                    getUI().setContent(new MainView());
 
                 } else {
                     Notification.show("Invalid credentials", Notification.Type.ERROR_MESSAGE);
