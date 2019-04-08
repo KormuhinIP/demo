@@ -16,18 +16,15 @@ public class MainView extends HorizontalLayout implements View {
     public MainView() {
 
         setSizeFull();
-        addStyleName("mainview");
         setSpacing(false);
         addComponent(new DashboardMenu());
 
         ComponentContainer content = new CssLayout();
-        content.addStyleName("view-content");
+
         content.setSizeFull();
         addComponent(content);
         setExpandRatio(content, 1.0f);
-
         new DashboardNavigator(content);
-
         UI.getCurrent().getNavigator()
                 .navigateTo(DashboardViewType.DASHBOARD.getViewName());
     }

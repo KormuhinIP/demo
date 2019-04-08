@@ -2,6 +2,9 @@ DROP table students;
 DROP table exams;
 DROP table teachers;
 DROP table payments;
+DROP table lessons;
+
+
 
 create table students (id BIGINT identity primary key, photo varchar(255), lastName VARCHAR(255), firstName VARCHAR(255),
 patronymic VARCHAR(255), phone VARCHAR(255), birthDay timestamp, license VARCHAR(255));
@@ -17,5 +20,7 @@ numberLicense VARCHAR(255),birthDay timestamp, experience int );
 
 
 create table payments (id BIGINT identity primary key, student_id BIGINT, paymentDate timestamp, sumPayment DOUBLE);
+
+create table lessons (id BIGINT identity primary key, dateLesson timestamp, student_id BIGINT, teacher_id BIGINT);
 
 

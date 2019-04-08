@@ -46,7 +46,7 @@ public final class DashboardMenu extends CustomComponent {
 
     private Button buildExit() {
         Button exit = new Button("exit");
-        exit.setStyleName(ValoTheme.BUTTON_SMALL);
+        exit.addStyleName(ValoTheme.BUTTON_SMALL);
         exit.addStyleName("red");
         exit.addClickListener(new Button.ClickListener() {
             public void buttonClick(Button.ClickEvent event) {
@@ -58,7 +58,7 @@ public final class DashboardMenu extends CustomComponent {
 
     private Component buildMenuItems() {
         CssLayout menuItemsLayout = new CssLayout();
-        menuItemsLayout.addStyleName("valo-menuitems");
+
         menuItemsLayout.addStyleName("secondHL");
 
         for (final DashboardViewType view : DashboardViewType.values()) {

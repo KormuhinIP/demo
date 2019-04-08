@@ -10,56 +10,45 @@ import com.byteowls.vaadin.chartjs.options.scale.Axis;
 import com.byteowls.vaadin.chartjs.options.scale.LinearScale;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
-import com.vaadin.server.Responsive;
-import com.vaadin.ui.*;
-import com.vaadin.ui.themes.ValoTheme;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.VerticalLayout;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class DashboardView extends Panel implements View {
+public class DashboardView extends VerticalLayout implements View {
 
 
-    private Label titleLabel;
-    //   private NotificationsButton notificationsButton;
-    private CssLayout dashboardPanels;
-    private VerticalLayout root;
-    private Window notificationsWindow;
+
 
 
     public DashboardView() {
-
-        addStyleName(ValoTheme.PANEL_BORDERLESS);
         setSizeFull();
-        root = new VerticalLayout();
-        root.setSizeFull();
-        root.setSpacing(false);
-        root.addStyleName("dashboard-view");
-        setContent(root);
-        Responsive.makeResponsive(root);
+        HorizontalLayout layoutOne = new HorizontalLayout();
 
-        Component content = buildContent();
-        root.addComponent(content);
-        root.setExpandRatio(content, 1);
+
+        layoutOne.setWidth(50, Unit.PERCENTAGE);
+
+
+        layoutOne.addComponent(buildChartStudents());
+        layoutOne.addComponent(buildChartStudents());
+
+        HorizontalLayout layoutTwo = new HorizontalLayout();
+
+        layoutTwo.setSizeFull();
+        layoutTwo.setWidth(50, Unit.PERCENTAGE);
+
+        layoutTwo.addComponent(buildChartStudents());
+        layoutTwo.addComponent(buildChartStudents());
+
+        addComponent(layoutOne);
+        addComponent(layoutTwo);
+
+
 
     }
 
-    private Component buildContent() {
-        dashboardPanels = new CssLayout();
-        dashboardPanels.addStyleName("dashboard-panels");
-        Responsive.makeResponsive(dashboardPanels);
-
-
-        dashboardPanels.addComponent(buildChartStudents());
-        dashboardPanels.addComponent(buildChartStudents());
-        dashboardPanels.addComponent(buildChartStudents());
-        dashboardPanels.addComponent(buildChartStudents());
-        // dashboardPanels.addComponent(buildChartTeachers());
-        //  dashboardPanels.addComponent(buildChartMany());
-        //  dashboardPanels.addComponent(buildTablePayment());
-
-        return dashboardPanels;
-    }
 
     private Component buildChartStudents() {
         BarChartConfig barConfig = new BarChartConfig();
@@ -68,8 +57,6 @@ public class DashboardView extends Panel implements View {
                 .labels("January", "February", "March", "April", "May", "June", "July")
                 .addDataset(
                         new BarDataset().backgroundColor("red").label("Students").yAxisID("y-axis-1"))
-
-
                 .and();
         barConfig.
                 options()
@@ -100,43 +87,12 @@ public class DashboardView extends Panel implements View {
 
         ChartJs chart = new ChartJs(barConfig);
         chart.setJsLoggingEnabled(true);
-        return createContentWrapper(chart);
+        return chart;
 
     }
 
 
-    private Component createContentWrapper(final Component content) {
-        final CssLayout slot = new CssLayout();
-        slot.setWidth("100%");
-        slot.addStyleName("dashboard-panel-slot");
 
-        CssLayout card = new CssLayout();
-        card.setWidth("100%");
-        card.addStyleName(ValoTheme.LAYOUT_CARD);
-
-
-        HorizontalLayout toolbar = new HorizontalLayout();
-        toolbar.addStyleName("dashboard-panel-toolbar");
-        toolbar.setWidth("100%");
-        toolbar.setSpacing(false);
-
-        Label caption = new Label(content.getCaption());
-        caption.addStyleName(ValoTheme.LABEL_H4);
-        caption.addStyleName(ValoTheme.LABEL_COLORED);
-        caption.addStyleName(ValoTheme.LABEL_NO_MARGIN);
-        content.setCaption(null);
-
-        MenuBar tools = new MenuBar();
-        tools.addStyleName(ValoTheme.MENUBAR_BORDERLESS);
-
-        toolbar.addComponents(caption, tools);
-        toolbar.setExpandRatio(caption, 1);
-
-
-        slot.addComponents(toolbar, content);
-        slot.addComponent(card);
-        return slot;
-    }
 
 
 

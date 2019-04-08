@@ -1,6 +1,5 @@
 package com.example.dao;
 
-import com.example.model.Student;
 import com.example.model.Teacher;
 
 import java.util.List;
@@ -8,7 +7,7 @@ import java.util.List;
 public interface TeacherDao {
     public List<Teacher> findAll();
 
-    public Student findById(long id);
+    public Teacher findById(long id);
 
     public void save(Teacher teacher);
 

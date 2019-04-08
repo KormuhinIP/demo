@@ -1,10 +1,10 @@
 package com.example.impl;
 
 import com.example.dao.TeacherDao;
-import com.example.model.Student;
 import com.example.model.Teacher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 
@@ -26,9 +26,13 @@ public class TeacherService implements TeacherDao {
     }
 
     @Override
-    public Student findById(long id) {
-        return null;
+    public Teacher findById(long id) {
+        String sql = "SELECT* FROM teachers where id=:id";
+        MapSqlParameterSource source = new MapSqlParameterSource();
+        source.addValue("id", id);
+        return jdbcTemplate.queryForObject(sql, source, new TeacherRowMapper());
     }
+
 
     @Override
     public void save(Teacher teacher) {

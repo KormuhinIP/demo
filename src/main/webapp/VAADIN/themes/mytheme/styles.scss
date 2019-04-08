@@ -1,22 +1,18 @@
 
-@import"../valo/valo.scss";
-
-@mixin mytheme{
-@include valo;
-}
-
 
 .secondHL{
 color: white;
+
+
 }
 
 .red .v-button-caption {
-	font-size: 12pt;
-	font-weight: bold;
 	color: red;
-	 text-align: center;
-        margin: 0 auto;
-
+overflow: auto;
 }
+
+
+
+
 
 
