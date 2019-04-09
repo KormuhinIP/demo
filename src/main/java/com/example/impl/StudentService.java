@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -43,6 +44,19 @@ public class StudentService implements StudentDao {
 
     }
 
+    public List<Student> getStudentStatistic(Date dateBegin, Date dateEnd) {
+
+        String sql = "SELECT * FROM students WHERE dateAdding >= :dateBegin and dateAdding <= :dateEnd";
+
+
+        MapSqlParameterSource source = new MapSqlParameterSource();
+        source.addValue("dateBegin", dateBegin);
+        source.addValue("dateEnd", dateEnd);
+        return jdbcTemplate.query(sql, source, new StudentRowMapper());
+    }
+
+
+
 
     @Override
     public void save(Student student) {
@@ -66,7 +80,7 @@ public class StudentService implements StudentDao {
         public Student mapRow(ResultSet rs, int rowNum) throws SQLException {
             return new Student(rs.getLong("id"), rs.getString("photo"), rs.getString("lastName"),
                     rs.getString("firstName"), rs.getString("patronymic"), rs.getString("phone"),
-                    rs.getDate("birthDay"), rs.getString("license"));
+                    rs.getDate("birthDay"), rs.getString("license"), rs.getDate("dateAdding"));
         }
     }
 

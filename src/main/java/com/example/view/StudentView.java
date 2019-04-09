@@ -103,6 +103,7 @@ public class StudentView extends VerticalLayout implements View {
             List<Student> list = ctx.getBean(StudentService.class).findByName(name);
             createPagination(list);
         }
+
     }
 
 

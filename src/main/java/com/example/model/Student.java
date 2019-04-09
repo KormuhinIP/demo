@@ -9,12 +9,13 @@ public class Student {
 
 
     private Date birthDay;
+    private Date dateAdding;
 
     public Student() {
     }
 
 
-    public Student(Long id, String photo, String lastName, String firstName, String patronymic, String phone, Date birthDay, String license) {
+    public Student(Long id, String photo, String lastName, String firstName, String patronymic, String phone, Date birthDay, String license, Date dateAdding) {
         this.id = id;
         this.photo = photo;
         this.lastName = lastName;
@@ -23,6 +24,7 @@ public class Student {
         this.phone = phone;
         this.birthDay = birthDay;
         this.license = license;
+        this.dateAdding = dateAdding;
     }
 
 
@@ -89,6 +91,14 @@ public class Student {
 
     public void setBirthDay(Date birthDay) {
         this.birthDay = birthDay;
+    }
+
+    public Date getDateAdding() {
+        return dateAdding;
+    }
+
+    public void setDateAdding(Date dateAdding) {
+        this.dateAdding = dateAdding;
     }
 
 }

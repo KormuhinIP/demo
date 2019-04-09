@@ -13,7 +13,9 @@ import com.byteowls.vaadin.chartjs.options.scale.Axis;
 import com.byteowls.vaadin.chartjs.options.scale.LinearScale;
 import com.example.impl.ApplicationContextHolder;
 import com.example.impl.PaymentService;
+import com.example.impl.StudentService;
 import com.example.model.Payment;
+import com.example.model.Student;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.Component;
@@ -24,17 +26,20 @@ import com.vaadin.ui.renderers.DateRenderer;
 import com.vaadin.ui.renderers.Renderer;
 import org.springframework.context.ApplicationContext;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
 public class DashboardView extends VerticalLayout implements View {
 
-    private ApplicationContext ctx;
+    private ApplicationContext ctx = ApplicationContextHolder.getApplicationContext();
     private List<Payment> paymentsList;
     private Grid<Payment> grid;
 
 
     public DashboardView() {
+
+
         setSizeFull();
         HorizontalLayout layoutOne = new HorizontalLayout();
 
@@ -86,10 +91,20 @@ public class DashboardView extends VerticalLayout implements View {
                 .done();
 
         List<String> labels = barConfig.data().getLabels();
+
+
         for (Dataset<?, ?> ds : barConfig.data().getDatasets()) {
             BarDataset lds = (BarDataset) ds;
+
             List<Double> data = new ArrayList<>();
+
             for (int i = 0; i < labels.size(); i++) {
+
+
+                List<Student> list = ctx.getBean(StudentService.class).getStudentStatistic(Date.valueOf("2019-01-01"), Date.valueOf("2019-02-28"));
+
+                System.out.println(list.size());
+
                 data.add((Math.random() > 0.5 ? 1.0 : 0.0) * Math.round(Math.random() * 100));
             }
             lds.dataAsList(data);
@@ -186,7 +201,7 @@ public class DashboardView extends VerticalLayout implements View {
 
     public Component buildTablePayment() {
 
-        ctx = ApplicationContextHolder.getApplicationContext();
+
         paymentsList = ctx.getBean(PaymentService.class).findAll();
 
 

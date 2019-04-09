@@ -7,7 +7,7 @@ DROP table lessons;
 
 
 create table students (id BIGINT identity primary key, photo varchar(255), lastName VARCHAR(255), firstName VARCHAR(255),
-patronymic VARCHAR(255), phone VARCHAR(255), birthDay timestamp, license VARCHAR(255));
+patronymic VARCHAR(255), phone VARCHAR(255), birthDay timestamp, license VARCHAR(255), dateAdding timestamp);
 
 
 
