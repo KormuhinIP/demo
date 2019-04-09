@@ -59,12 +59,12 @@ public final class DashboardMenu extends CustomComponent {
     private Component buildMenuItems() {
         CssLayout menuItemsLayout = new CssLayout();
 
-        menuItemsLayout.addStyleName("secondHL");
 
         for (final DashboardViewType view : DashboardViewType.values()) {
             Component menuItemComponent = new ValoMenuItemButton(view);
             menuItemsLayout.addComponent(menuItemComponent);
         }
+        menuItemsLayout.addStyleName("secondHL");
         return menuItemsLayout;
     }
 

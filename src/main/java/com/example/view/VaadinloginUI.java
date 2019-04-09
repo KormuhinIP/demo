@@ -1,8 +1,8 @@
 package com.example.view;
 
-import com.vaadin.annotations.StyleSheet;
+
 import com.vaadin.annotations.Theme;
-import com.vaadin.annotations.VaadinServletConfiguration;
+import com.vaadin.annotations.Widgetset;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.spring.annotation.SpringUI;
@@ -12,9 +12,10 @@ import javax.servlet.annotation.WebServlet;
 import java.util.Locale;
 
 @SuppressWarnings("serial")
-@Theme("valo")
-@StyleSheet("app://VAADIN/themes/mytheme/styles.scss")
+@Theme("vaadinmaps")
+
 @SpringUI
+@Widgetset("AppWidgetset")
 public class VaadinloginUI extends UI {
 
 
@@ -26,7 +27,7 @@ public class VaadinloginUI extends UI {
     }
 
     @WebServlet(value = "/*", asyncSupported = true)
-    @VaadinServletConfiguration(productionMode = false, ui = VaadinloginUI.class)
+    // @VaadinServletConfiguration(productionMode = false, ui = VaadinloginUI.class, widgetset = "com.example.view.widgetset.AppWidgetset")
     public static class Servlet extends VaadinServlet {
     }
 

@@ -55,6 +55,11 @@
 			<artifactId>vaadin-chartjs</artifactId>
 			<version>1.4.0</version>
 		</dependency>
+        <dependency>
+            <groupId>com.vaadin.tapio</groupId>
+            <artifactId>googlemaps</artifactId>
+            <version>2.1.0</version>
+        </dependency>
 
 
 	</dependencies>
@@ -97,7 +102,30 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
+            </plugin>
+            <plugin>
+                <groupId>com.vaadin</groupId>
+                <artifactId>vaadin-maven-plugin</artifactId>
+                <version>8.0.4</version>
+                <configuration>
+                    <extraJvmArgs>-Xmx2g -Xss1024k</extraJvmArgs>
+                    <webappDirectory>${basedir}/target/classes/VAADIN/widgetsets</webappDirectory>
+                    <draftCompile>false</draftCompile>
+                    <compileReport>false</compileReport>
+                    <style>OBF</style>
+                    <strict>true</strict>
+                    <runTarget>http://localhost:8080/simple</runTarget>
+                    <module>AppWidgetset</module>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>update-widgetset</goal>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
 		</plugins>
 	</build>
 
