@@ -2,14 +2,16 @@ package com.example.impl;
 
 import com.example.dao.PaymentDao;
 import com.example.model.Payment;
-import com.example.model.Teacher;
+import com.example.model.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -33,23 +35,44 @@ public class PaymentService implements PaymentDao {
     }
 
     @Override
-    public void save(Teacher teacher) {
+    public void save(Payment payment) {
 
     }
 
     @Override
-    public void delete(Teacher teacher) {
+    public void delete(Payment payment) {
 
     }
 
     @Override
-    public void update(Teacher teacher) {
+    public void update(Payment payment) {
 
     }
 
+
+    public List<Student> paidStudents() {
+        List<Student> list = new ArrayList<>();
+        String sql = "SELECT DISTINCT student_id  FROM payments";
+        for (Long studentId : jdbcTemplate.getJdbcOperations().queryForList(sql, Long.class)) {
+            list.add(studentService.findById(studentId));
+        }
+        return list;
+    }
+
+
     @Override
-    public List<Payment> findByName(String name) {
-        return null;
+    public List<Payment> findPaidStudents(long studentId) {
+
+        String sql = "select * from payments where student_id like :student";
+        MapSqlParameterSource source = new MapSqlParameterSource();
+        source.addValue("student", studentId);
+        return jdbcTemplate.query(sql, source, new PaymentRowMapper());
+    }
+
+    @Override
+    public double paymentOfMonth(int month) {
+        String sql = "SELECT SUM (sumPayment) FROM payments WHERE MONTH(paymentDate) = ";
+        return jdbcTemplate.getJdbcOperations().queryForObject(sql + String.valueOf(month), Integer.class);
     }
 
     private final class PaymentRowMapper implements RowMapper<Payment> {

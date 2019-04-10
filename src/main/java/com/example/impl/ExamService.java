@@ -44,7 +44,7 @@ public class ExamService implements ExamDao {
 
     @Override
     public List<Exam> findByDate(Date date) {
-        String sql = "select * from exams where date_exam like :date";
+        String sql = "select * from exams where dateExam like :date";
         MapSqlParameterSource source = new MapSqlParameterSource();
         source.addValue("date", "%" + date + "%");
         return jdbcTemplate.query(sql, source, new ExamRowMapper());

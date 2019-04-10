@@ -14,8 +14,8 @@ import com.byteowls.vaadin.chartjs.options.scale.LinearScale;
 import com.example.impl.ApplicationContextHolder;
 import com.example.impl.PaymentService;
 import com.example.impl.StudentService;
+import com.example.impl.TeacherService;
 import com.example.model.Payment;
-import com.example.model.Student;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.Component;
@@ -26,7 +26,6 @@ import com.vaadin.ui.renderers.DateRenderer;
 import com.vaadin.ui.renderers.Renderer;
 import org.springframework.context.ApplicationContext;
 
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,29 +38,17 @@ public class DashboardView extends VerticalLayout implements View {
 
     public DashboardView() {
 
-
         setSizeFull();
         HorizontalLayout layoutOne = new HorizontalLayout();
-
-
         layoutOne.setSizeFull();
-
-
         layoutOne.addComponent(buildChartStudents());
         layoutOne.addComponent(buildChartTeachers());
-
         HorizontalLayout layoutTwo = new HorizontalLayout();
-
-
         layoutTwo.setSizeFull();
-
         layoutTwo.addComponent(buildChartMoney());
         layoutTwo.addComponent(buildTablePayment());
-
         addComponent(layoutOne);
         addComponent(layoutTwo);
-
-
     }
 
 
@@ -91,30 +78,19 @@ public class DashboardView extends VerticalLayout implements View {
                 .done();
 
         List<String> labels = barConfig.data().getLabels();
-
-
         for (Dataset<?, ?> ds : barConfig.data().getDatasets()) {
             BarDataset lds = (BarDataset) ds;
-
-            List<Double> data = new ArrayList<>();
-
-            for (int i = 0; i < labels.size(); i++) {
-
-
-                List<Student> list = ctx.getBean(StudentService.class).getStudentStatistic(Date.valueOf("2019-01-01"), Date.valueOf("2019-02-28"));
-
-                System.out.println(list.size());
-
-                data.add((Math.random() > 0.5 ? 1.0 : 0.0) * Math.round(Math.random() * 100));
+            List<Double> listStudents = new ArrayList<>();
+            for (int i = 1; i <= labels.size(); i++) {
+                listStudents.add(Double.valueOf(ctx.getBean(StudentService.class).getStudentStatistic(i)));
             }
-            lds.dataAsList(data);
+            lds.dataAsList(listStudents);
         }
         ChartJs chart = new ChartJs(barConfig);
         chart.setJsLoggingEnabled(true);
         chart.setHeight(50, Unit.PERCENTAGE);
         chart.setWidth(70, Unit.PERCENTAGE);
         return chart;
-
     }
 
 
@@ -146,11 +122,11 @@ public class DashboardView extends VerticalLayout implements View {
         List<String> labels = barConfig.data().getLabels();
         for (Dataset<?, ?> ds : barConfig.data().getDatasets()) {
             BarDataset lds = (BarDataset) ds;
-            List<Double> data = new ArrayList<>();
-            for (int i = 0; i < labels.size(); i++) {
-                data.add((Math.random() > 0.5 ? 1.0 : 0.0) * Math.round(Math.random() * 100));
+            List<Double> listTeachers = new ArrayList<>();
+            for (int i = 1; i <= labels.size(); i++) {
+                listTeachers.add(Double.valueOf(ctx.getBean(TeacherService.class).getTeacherStatistic(i)));
             }
-            lds.dataAsList(data);
+            lds.dataAsList(listTeachers);
         }
         ChartJs chart = new ChartJs(barConfig);
         chart.setJsLoggingEnabled(true);
@@ -166,7 +142,7 @@ public class DashboardView extends VerticalLayout implements View {
         config.data()
                 .labels("January", "February", "March", "April", "May", "June", "August", "September", "October", "November", "December")
                 .addDataset(new LineDataset().label("Money")
-                        .data(10d, 30d, 46d, 2d, 8d, 50d, 0d)
+                        .data()
                         .fill(false))
                 .and()
                 .options()
@@ -189,31 +165,40 @@ public class DashboardView extends VerticalLayout implements View {
                 .and()
                 .done();
 
+        List<String> labels = config.data().getLabels();
+        for (Dataset<?, ?> ds : config.data().getDatasets()) {
+            LineDataset lds = (LineDataset) ds;
+            List<Double> listPayment = new ArrayList<>();
+            for (int i = 1; i <= labels.size(); i++) {
+                Double sumOfMonth = 0.0;
+                try {
+                    sumOfMonth = ctx.getBean(PaymentService.class).paymentOfMonth(i);
+                } catch (NullPointerException e) {
+                }
+
+                listPayment.add(sumOfMonth);
+            }
+            lds.dataAsList(listPayment);
+        }
+
         ChartJs chart = new ChartJs(config);
         chart.addStyleName("chart-container");
         chart.setJsLoggingEnabled(true);
         chart.setHeight(50, Unit.PERCENTAGE);
         chart.setWidth(70, Unit.PERCENTAGE);
-
         return chart;
     }
 
 
     public Component buildTablePayment() {
 
-
         paymentsList = ctx.getBean(PaymentService.class).findAll();
-
-
         grid = new Grid<>(Payment.class);
         grid.setItems(paymentsList);
         grid.setColumns("paymentDate", "sumPayment");
         grid.setColumnOrder(grid.addColumn(item -> (item.getStudent().getLastName())).setCaption("Student"));
         grid.getColumn("paymentDate").setRenderer((Renderer) (new DateRenderer("%1$td-%1$tm-%1$tY")));
-
-
         grid.setWidth(70, Unit.PERCENTAGE);
-
         return grid;
     }
 

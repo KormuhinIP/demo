@@ -16,4 +16,6 @@ public interface TeacherDao {
     public void update(Teacher teacher);
 
     public List<Teacher> findByName(String name);
+
+    public int getTeacherStatistic(int month);
 }

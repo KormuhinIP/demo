@@ -4,12 +4,13 @@ import com.example.component.TrackView;
 import com.example.impl.ApplicationContextHolder;
 import com.example.impl.LessonService;
 import com.example.model.Lesson;
+import com.example.model.Teacher;
+import com.example.view.editor.LessonViewEditor;
 import com.vaadin.addon.pagination.Pagination;
 import com.vaadin.addon.pagination.PaginationChangeListener;
 import com.vaadin.addon.pagination.PaginationResource;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
-import com.vaadin.shared.ui.ValueChangeMode;
 import com.vaadin.ui.*;
 import com.vaadin.ui.renderers.DateRenderer;
 import com.vaadin.ui.renderers.Renderer;
@@ -25,17 +26,20 @@ public class LessonView extends VerticalLayout implements View {
     private Pagination pagination;
     private Grid<Lesson> grid;
     private HorizontalLayout horizontalLayout;
-    private TextField filter;
+    private ComboBox<Teacher> filter;
+    private List<Teacher> listTeachers;
 
 
     public LessonView() {
 
         ctx = ApplicationContextHolder.getApplicationContext();
         lessonsList = ctx.getBean(LessonService.class).findAll();
+        listTeachers = ctx.getBean(LessonService.class).listTeachers();
+
         grid = new Grid<>(Lesson.class);
 
 
-        showLesson("");
+        showLesson(null);
 
         createFilter();
         filter.addValueChangeListener(e -> showLesson(e.getValue()));
@@ -63,19 +67,19 @@ public class LessonView extends VerticalLayout implements View {
     }
 
 
-    private void showLesson(String name) {
-        if (name.equals("")) {
+    private void showLesson(Teacher teacher) {
+        if (teacher == null) {
             createPagination(lessonsList);
         } else {
-            List<Lesson> list = ctx.getBean(LessonService.class).findByName(name);
+            List<Lesson> list = ctx.getBean(LessonService.class).findLessons(teacher.getId());
             createPagination(list);
         }
     }
 
     private void createFilter() {
-        filter = new TextField();
-        filter.setPlaceholder("input value");
-        filter.setValueChangeMode(ValueChangeMode.EAGER);
+        filter = new ComboBox<>("Theacher", listTeachers);
+        filter.setPlaceholder("choose theacher");
+        filter.setItemCaptionGenerator(Teacher::getLastName);
     }
 
 
@@ -109,7 +113,7 @@ public class LessonView extends VerticalLayout implements View {
 
 
         Button add = new Button("add in", e -> {
-            //  new LessonViewEditor(new Lesson(), grid);
+            new LessonViewEditor(new Lesson(), grid);
         });
 
 
@@ -118,7 +122,7 @@ public class LessonView extends VerticalLayout implements View {
 
         Button edit = new Button("edit", e -> {
             if (grid.asSingleSelect().getValue() != null) {
-                //    new LessonViewEditor(grid.asSingleSelect().getValue(), grid);
+                new LessonViewEditor(grid.asSingleSelect().getValue(), grid);
             }
         });
 

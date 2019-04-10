@@ -1,7 +1,6 @@
 package com.example.dao;
 
 import com.example.model.Payment;
-import com.example.model.Teacher;
 
 import java.util.List;
 
@@ -10,11 +9,13 @@ public interface PaymentDao {
 
     public Payment findById(long id);
 
-    public void save(Teacher teacher);
+    public void save(Payment payment);
 
-    public void delete(Teacher teacher);
+    public void delete(Payment payment);
 
-    public void update(Teacher teacher);
+    public void update(Payment payment);
 
-    public List<Payment> findByName(String name);
+    public List<Payment> findPaidStudents(long studentId);
+
+    public double paymentOfMonth(int month);
 }

@@ -51,7 +51,16 @@ public class TeacherService implements TeacherDao {
 
     @Override
     public List<Teacher> findByName(String name) {
-        return null;
+        String sql = "select * from teachers where concat(upper(lastName), ' ', upper(firstName),' ',upper(patronymic)) like :name";
+        MapSqlParameterSource source = new MapSqlParameterSource();
+        source.addValue("name", "%" + name.toUpperCase() + "%");
+        return jdbcTemplate.query(sql, source, new TeacherRowMapper());
+    }
+
+    @Override
+    public int getTeacherStatistic(int month) {
+        String sql = "SELECT COUNT(*) FROM teachers WHERE MONTH(dateAdding) = ";
+        return jdbcTemplate.getJdbcOperations().queryForObject(sql + String.valueOf(month), Integer.class);
     }
 
     private final class TeacherRowMapper implements RowMapper<Teacher> {

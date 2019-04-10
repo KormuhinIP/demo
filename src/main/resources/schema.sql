@@ -16,7 +16,7 @@ comment VARCHAR(255), evaluation VARCHAR(255));
 
 
 create table teachers (id BIGINT identity primary key, lastName VARCHAR(255), firstName VARCHAR(255), patronymic VARCHAR(255),
-numberLicense VARCHAR(255),birthDay timestamp, experience int );
+numberLicense VARCHAR(255),birthDay timestamp, experience int, dateAdding timestamp);
 
 
 create table payments (id BIGINT identity primary key, student_id BIGINT, paymentDate timestamp, sumPayment DOUBLE);

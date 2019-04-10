@@ -16,4 +16,6 @@ public interface StudentDao {
     public void update(Student student);
 
     public List<Student> findByName(String name);
+
+    public int getStudentStatistic(int month);
 }
