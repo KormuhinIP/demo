@@ -8,9 +8,13 @@ import com.vaadin.data.converter.LocalDateToDateConverter;
 import com.vaadin.data.validator.DateRangeValidator;
 import com.vaadin.data.validator.RegexpValidator;
 import com.vaadin.data.validator.StringLengthValidator;
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.shared.ui.datefield.DateResolution;
 import com.vaadin.ui.*;
+import org.vaadin.filesystemdataprovider.FilesystemData;
+import org.vaadin.filesystemdataprovider.FilesystemDataProvider;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 
@@ -25,7 +29,7 @@ public class StudentViewEditor {
     final Window sub;
     Student student;
     Grid grid;
-
+    TextField downloadPhotoText;
 
     public StudentViewEditor(Student student, Grid grid) {
 
@@ -47,11 +51,15 @@ public class StudentViewEditor {
 
         binder = new BeanValidationBinder<>(Student.class);
 
-        TextField downloadPhotoText = new TextField("Download photo");
+        downloadPhotoText = new TextField("Download photo");
         downloadPhotoText.setValue(student.getLastName() == null ? "" : student.getPhoto());
-        binder.forField(downloadPhotoText).withValidator(new StringLengthValidator("input name photo", 3, 25))
+        binder.forField(downloadPhotoText).withValidator(new StringLengthValidator("input name photo", 3, 100))
                 .bind(Student::getPhoto, Student::setPhoto);
         layout.addComponent(downloadPhotoText);
+        Button button = new Button("Open file");
+
+        button.addClickListener(clickEvent -> fileTree());
+        layout.addComponent(button);
 
         TextField lastNameText = new TextField("Last Name");
         lastNameText.setValue(student.getLastName() == null ? "" : student.getLastName());
@@ -105,8 +113,40 @@ public class StudentViewEditor {
     }
 
 
-    public void ButtonBild() {
+    private void fileTree() {
+        Panel panel = new Panel();
+        Window winTree = new Window();
+        VerticalLayout layout = new VerticalLayout();
 
+        File rootFile = new File("/");
+        FilesystemData root = new FilesystemData(rootFile, false);
+        FilesystemDataProvider fileSystem = new FilesystemDataProvider(root);
+        final Tree<File> tree = new Tree<>();
+        tree.setDataProvider(fileSystem);
+        tree.setItemIconGenerator(item -> {
+            if (item.isDirectory())
+                return VaadinIcons.FOLDER;
+            else return VaadinIcons.FILE;
+        });
+
+        tree.addItemClickListener(event -> {
+            if (event.getItem().isFile()) {
+                downloadPhotoText.setValue(event.getItem().getPath());
+                winTree.close();
+            }
+        });
+        panel.setSizeFull();
+        panel.setContent(tree);
+        layout.setHeight("300px");
+        layout.setWidth("600px");
+        layout.addComponent(panel);
+        winTree.setPositionX(600);
+        winTree.setPositionY(250);
+        winTree.setContent(layout);
+        UI.getCurrent().addWindow(winTree);
+    }
+
+    public void ButtonBild() {
 
         Button buttonOk = new Button("OK");
         buttonOk.addClickListener(new Button.ClickListener() {
