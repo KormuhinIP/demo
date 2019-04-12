@@ -28,12 +28,12 @@ public class LessonViewEditor {
     private static final Logger logger = LoggerFactory.getLogger(LessonViewEditor.class);
 
 
-    final FormLayout layout;
-    final HorizontalLayout hlayout;
-    final Window sub;
-    BeanValidationBinder<Lesson> binder;
-    Lesson lesson;
-    Grid grid;
+    private FormLayout layout;
+    private HorizontalLayout hlayout;
+    private Window sub;
+    private BeanValidationBinder<Lesson> binder;
+    private Lesson lesson;
+    private Grid grid;
     private List<Student> listStudents;
     private List<Teacher> listTeachers;
     private ApplicationContext ctx;
@@ -127,20 +127,10 @@ public class LessonViewEditor {
         });
 
         Button buttonApply = new Button("Apply");
-        buttonApply.addClickListener(new Button.ClickListener() {
-            public void buttonClick(Button.ClickEvent event) {
-
-                sub.close();
-            }
-        });
+        buttonApply.addClickListener((Button.ClickListener) event -> sub.close());
 
         Button buttonCancel = new Button("Cancel");
-        buttonCancel.addClickListener(new Button.ClickListener() {
-            public void buttonClick(Button.ClickEvent event) {
-
-                sub.close();
-            }
-        });
+        buttonCancel.addClickListener((Button.ClickListener) event -> sub.close());
 
         hlayout.addComponents(buttonOk, buttonApply, buttonCancel);
     }

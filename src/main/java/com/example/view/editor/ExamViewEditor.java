@@ -29,12 +29,12 @@ public class ExamViewEditor {
     private static final Logger logger = LoggerFactory.getLogger(ExamViewEditor.class);
 
 
-    final FormLayout layout;
-    final HorizontalLayout hlayout;
-    final Window sub;
-    BeanValidationBinder<Exam> binder;
-    Exam exam;
-    Grid grid;
+    private FormLayout layout;
+    private HorizontalLayout hlayout;
+    private Window sub;
+    private BeanValidationBinder<Exam> binder;
+    private Exam exam;
+    private Grid grid;
     private List<Student> listStudents;
     private ApplicationContext ctx;
 
@@ -128,18 +128,10 @@ public class ExamViewEditor {
         });
 
         Button buttonApply = new Button("Apply");
-        buttonApply.addClickListener(new Button.ClickListener() {
-            public void buttonClick(Button.ClickEvent event) {
-                sub.close();
-            }
-        });
+        buttonApply.addClickListener((Button.ClickListener) event -> sub.close());
 
         Button buttonCancel = new Button("Cancel");
-        buttonCancel.addClickListener(new Button.ClickListener() {
-            public void buttonClick(Button.ClickEvent event) {
-                sub.close();
-            }
-        });
+        buttonCancel.addClickListener((Button.ClickListener) event -> sub.close());
 
         hlayout.addComponents(buttonOk, buttonApply, buttonCancel);
     }
