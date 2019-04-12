@@ -1,5 +1,6 @@
 package com.example.view.editor;
 
+import com.example.component.MyNotNullValidator;
 import com.example.component.TrackView;
 import com.example.impl.ApplicationContextHolder;
 import com.example.impl.StudentService;
@@ -9,10 +10,13 @@ import com.example.model.Student;
 import com.example.model.Teacher;
 import com.vaadin.data.BeanValidationBinder;
 import com.vaadin.data.ValidationException;
+import com.vaadin.data.Validator;
 import com.vaadin.data.converter.LocalDateTimeToDateConverter;
 import com.vaadin.data.validator.DateTimeRangeValidator;
 import com.vaadin.shared.ui.datefield.DateTimeResolution;
 import com.vaadin.ui.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 
 import java.time.LocalDateTime;
@@ -20,6 +24,8 @@ import java.time.ZoneId;
 import java.util.List;
 
 public class LessonViewEditor {
+
+    private static final Logger logger = LoggerFactory.getLogger(LessonViewEditor.class);
 
 
     final FormLayout layout;
@@ -71,14 +77,16 @@ public class LessonViewEditor {
         students.setItemCaptionGenerator(Student::getLastName);
         students.setValue(lesson.getStudent());
         students.setEmptySelectionAllowed(false);
-        binder.bind(students, Lesson::getStudent, Lesson::setStudent);
+        binder.forField(students).withValidator((Validator<Student>) new MyNotNullValidator("choose student"))
+                .bind(Lesson::getStudent, Lesson::setStudent);
         layout.addComponent(students);
 
         ComboBox<Teacher> teachers = new ComboBox<>("Teacher", listTeachers);
         teachers.setItemCaptionGenerator(Teacher::getLastName);
         teachers.setValue(lesson.getTeacher());
         teachers.setEmptySelectionAllowed(false);
-        binder.bind(teachers, Lesson::getTeacher, Lesson::setTeacher);
+        binder.forField(teachers).withValidator((Validator<Teacher>) new MyNotNullValidator("choose teacher"))
+                .bind(Lesson::getTeacher, Lesson::setTeacher);
         layout.addComponent(teachers);
 
 
@@ -107,8 +115,9 @@ public class LessonViewEditor {
                     grid.scrollToStart();
 
                 } catch (ValidationException e) {
-                    Notification.show("Exam could not be saved, " +
+                    Notification.show("Lesson could not be saved, " +
                             "please check error messages for each field.");
+                    logger.info(e.toString() + getClass().getName());
                 }
 
                 sub.close();

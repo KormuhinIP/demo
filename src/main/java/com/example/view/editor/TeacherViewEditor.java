@@ -9,11 +9,15 @@ import com.vaadin.data.validator.DateRangeValidator;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.shared.ui.datefield.DateResolution;
 import com.vaadin.ui.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 
 public class TeacherViewEditor {
+
+    private static final Logger logger = LoggerFactory.getLogger(TeacherViewEditor.class);
 
 
     final FormLayout layout;
@@ -25,6 +29,7 @@ public class TeacherViewEditor {
 
 
     public TeacherViewEditor(Teacher teacher, Grid grid) {
+
 
 
         this.teacher = teacher;
@@ -109,6 +114,7 @@ public class TeacherViewEditor {
                 } catch (ValidationException e) {
                     Notification.show("Teacher could not be saved, " +
                             "please check error messages for each field.");
+                    logger.info(e.toString() + getClass().getName());
                 }
 
                 sub.close();

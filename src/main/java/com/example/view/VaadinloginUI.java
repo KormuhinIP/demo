@@ -7,9 +7,12 @@ import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.UI;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.annotation.WebServlet;
 import java.util.Locale;
+
 
 @SuppressWarnings("serial")
 @Theme("vaadinmaps")
@@ -18,12 +21,14 @@ import java.util.Locale;
 @Widgetset("AppWidgetset")
 public class VaadinloginUI extends UI {
 
+    private static final Logger logger = LoggerFactory.getLogger(VaadinloginUI.class);
+
 
     @Override
     protected void init(VaadinRequest vaadinRequest) {
         setLocale(Locale.US);
         updateContent();
-
+        logger.info("start UI");
     }
 
     @WebServlet(value = "/*", asyncSupported = true)

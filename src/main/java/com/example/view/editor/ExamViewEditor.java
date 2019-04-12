@@ -2,17 +2,21 @@ package com.example.view.editor;
 
 import com.example.component.EvaluationEnum;
 import com.example.component.KindExamEnum;
+import com.example.component.MyNotNullValidator;
 import com.example.impl.ApplicationContextHolder;
 import com.example.impl.StudentService;
 import com.example.model.Exam;
 import com.example.model.Student;
 import com.vaadin.data.BeanValidationBinder;
 import com.vaadin.data.ValidationException;
+import com.vaadin.data.Validator;
 import com.vaadin.data.converter.LocalDateToDateConverter;
 import com.vaadin.data.validator.DateRangeValidator;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.shared.ui.datefield.DateResolution;
 import com.vaadin.ui.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 
 import java.text.SimpleDateFormat;
@@ -20,6 +24,9 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class ExamViewEditor {
+
+
+    private static final Logger logger = LoggerFactory.getLogger(ExamViewEditor.class);
 
 
     final FormLayout layout;
@@ -88,7 +95,8 @@ public class ExamViewEditor {
         students.setItemCaptionGenerator(Student::getLastName);
         students.setValue(exam.getStudent());
         students.setEmptySelectionAllowed(false);
-        binder.bind(students, Exam::getStudent, Exam::setStudent);
+        binder.forField(students).withValidator((Validator<Student>) new MyNotNullValidator("choose student"))
+                .bind(Exam::getStudent, Exam::setStudent);
         layout.addComponent(students);
 
         ButtonBild();
@@ -114,6 +122,7 @@ public class ExamViewEditor {
                 } catch (ValidationException e) {
                     Notification.show("Exam could not be saved, " +
                             "please check error messages for each field.");
+                    logger.info(e.toString() + getClass().getName());
                 }
 
                 sub.close();

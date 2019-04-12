@@ -1,16 +1,20 @@
 package com.example.view.editor;
 
+import com.example.component.MyNotNullValidator;
 import com.example.impl.ApplicationContextHolder;
 import com.example.impl.StudentService;
 import com.example.model.Payment;
 import com.example.model.Student;
 import com.vaadin.data.BeanValidationBinder;
 import com.vaadin.data.ValidationException;
+import com.vaadin.data.Validator;
 import com.vaadin.data.converter.LocalDateToDateConverter;
 import com.vaadin.data.converter.StringToDoubleConverter;
 import com.vaadin.data.validator.DateRangeValidator;
 import com.vaadin.shared.ui.datefield.DateResolution;
 import com.vaadin.ui.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 
 import java.text.SimpleDateFormat;
@@ -19,6 +23,7 @@ import java.util.List;
 
 public class PaymentViewEditor {
 
+    private static final Logger logger = LoggerFactory.getLogger(PaymentViewEditor.class);
 
     final FormLayout layout;
     final HorizontalLayout hlayout;
@@ -56,7 +61,8 @@ public class PaymentViewEditor {
         students.setItemCaptionGenerator(Student::getLastName);
         students.setValue(payment.getStudent());
         students.setEmptySelectionAllowed(false);
-        binder.bind(students, Payment::getStudent, Payment::setStudent);
+        binder.forField(students).withValidator((Validator<Student>) new MyNotNullValidator("choose student"))
+            .bind(Payment::getStudent, Payment::setStudent);
         layout.addComponent(students);
 
 
@@ -96,8 +102,9 @@ public class PaymentViewEditor {
                     grid.scrollToStart();
 
                 } catch (ValidationException e) {
-                    Notification.show("Exam could not be saved, " +
+                    Notification.show("Payment could not be saved, " +
                             "please check error messages for each field.");
+                    logger.info(e.toString() + getClass().getName());
                 }
 
                 sub.close();

@@ -11,6 +11,8 @@ import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.shared.ui.datefield.DateResolution;
 import com.vaadin.ui.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.vaadin.filesystemdataprovider.FilesystemData;
 import org.vaadin.filesystemdataprovider.FilesystemDataProvider;
 
@@ -19,6 +21,8 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 
 public class StudentViewEditor {
+
+    private static final Logger logger = LoggerFactory.getLogger(StudentViewEditor.class);
 
 
     BeanValidationBinder<Student> binder;
@@ -32,6 +36,8 @@ public class StudentViewEditor {
     TextField downloadPhotoText;
 
     public StudentViewEditor(Student student, Grid grid) {
+
+        logger.info("start " + getClass().getName());
 
 
         this.student = student;
@@ -160,6 +166,7 @@ public class StudentViewEditor {
                 } catch (ValidationException e) {
                     Notification.show("Student could not be saved, " +
                             "please check error messages for each field.");
+                    logger.info(e.toString() + getClass().getName());
                 }
 
                 sub.close();
@@ -170,7 +177,6 @@ public class StudentViewEditor {
         Button buttonApply = new Button("Apply");
         buttonApply.addClickListener(new Button.ClickListener() {
             public void buttonClick(Button.ClickEvent event) {
-
                 sub.close();
             }
         });
@@ -179,11 +185,9 @@ public class StudentViewEditor {
         Button buttonCancel = new Button("Cancel");
         buttonCancel.addClickListener(new Button.ClickListener() {
             public void buttonClick(Button.ClickEvent event) {
-
                 sub.close();
             }
         });
-
 
         hlayout.addComponents(buttonOk, buttonApply, buttonCancel);
 

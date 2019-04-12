@@ -61,13 +61,7 @@ public class PaymentView extends VerticalLayout implements View {
 
         addComponents(filter, grid, pagination, horizontalLayout);
         setExpandRatio(grid, 1);
-
-
     }
-
-
-
-
 
     private void createFilter() {
         filter = new ComboBox<>("Student", paidStudents);

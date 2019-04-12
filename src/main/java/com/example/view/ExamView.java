@@ -12,6 +12,8 @@ import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.*;
 import com.vaadin.ui.renderers.DateRenderer;
 import com.vaadin.ui.renderers.Renderer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 
 import java.util.Date;
@@ -19,6 +21,8 @@ import java.util.List;
 
 
 public class ExamView extends VerticalLayout implements View {
+
+    private static final Logger logger = LoggerFactory.getLogger(ExamView.class);
 
 
     private ApplicationContext ctx;
@@ -107,26 +111,18 @@ public class ExamView extends VerticalLayout implements View {
 
         horizontalLayout = new HorizontalLayout();
 
-
         Button add = new Button("add in", e -> {
             new ExamViewEditor(new Exam(), grid);
         });
-
-
         Button delete = new Button("delete");
-
 
         Button edit = new Button("edit", e -> {
             if (grid.asSingleSelect().getValue() != null) {
                 new ExamViewEditor(grid.asSingleSelect().getValue(), grid);
             }
         });
-
-
         horizontalLayout.addComponents(add, edit, delete);
     }
-
-
 
 
     @Override

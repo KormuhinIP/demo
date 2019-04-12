@@ -24,12 +24,16 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.renderers.DateRenderer;
 import com.vaadin.ui.renderers.Renderer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class DashboardView extends VerticalLayout implements View {
+
+    private static final Logger logger = LoggerFactory.getLogger(DashboardView.class);
 
     private ApplicationContext ctx = ApplicationContextHolder.getApplicationContext();
     private List<Payment> paymentsList;
@@ -82,7 +86,7 @@ public class DashboardView extends VerticalLayout implements View {
             BarDataset lds = (BarDataset) ds;
             List<Double> listStudents = new ArrayList<>();
             for (int i = 1; i <= labels.size(); i++) {
-                listStudents.add(Double.valueOf(ctx.getBean(StudentService.class).getStudentStatistic(i)));
+                listStudents.add(Double.valueOf(ctx.getBean(StudentService.class).getStudentStatistic(i))); // I know that it is bad code, but I could not make needed query
             }
             lds.dataAsList(listStudents);
         }
@@ -124,7 +128,7 @@ public class DashboardView extends VerticalLayout implements View {
             BarDataset lds = (BarDataset) ds;
             List<Double> listTeachers = new ArrayList<>();
             for (int i = 1; i <= labels.size(); i++) {
-                listTeachers.add(Double.valueOf(ctx.getBean(TeacherService.class).getTeacherStatistic(i)));
+                listTeachers.add(Double.valueOf(ctx.getBean(TeacherService.class).getTeacherStatistic(i))); // I know that it is bad code, but I could not make needed query
             }
             lds.dataAsList(listTeachers);
         }
@@ -133,9 +137,7 @@ public class DashboardView extends VerticalLayout implements View {
         chart.setHeight(50, Unit.PERCENTAGE);
         chart.setWidth(70, Unit.PERCENTAGE);
         return chart;
-
     }
-
 
     public Component buildChartMoney() {
         LineChartConfig config = new LineChartConfig();
@@ -174,8 +176,8 @@ public class DashboardView extends VerticalLayout implements View {
                 try {
                     sumOfMonth = ctx.getBean(PaymentService.class).paymentOfMonth(i);
                 } catch (NullPointerException e) {
+                    logger.error(e.toString() + getClass().getName());
                 }
-
                 listPayment.add(sumOfMonth);
             }
             lds.dataAsList(listPayment);
@@ -189,7 +191,6 @@ public class DashboardView extends VerticalLayout implements View {
         return chart;
     }
 
-
     public Component buildTablePayment() {
 
         paymentsList = ctx.getBean(PaymentService.class).findAll();
@@ -197,7 +198,7 @@ public class DashboardView extends VerticalLayout implements View {
         grid.setItems(paymentsList);
         grid.setColumns("paymentDate", "sumPayment");
         grid.setColumnOrder(grid.addColumn(item -> (item.getStudent().getLastName())).setCaption("Student"));
-        grid.getColumn("paymentDate").setRenderer((Renderer) (new DateRenderer("%1$td-%1$tm-%1$tY")));
+        grid.getColumn("paymentDate").setRenderer((Renderer) (new DateRenderer("%1$td-%1$tm-%1$tY"))); //Did not render without transformation
         grid.setWidth(70, Unit.PERCENTAGE);
         return grid;
     }
