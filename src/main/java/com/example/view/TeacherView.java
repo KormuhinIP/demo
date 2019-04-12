@@ -13,11 +13,15 @@ import com.vaadin.shared.ui.ValueChangeMode;
 import com.vaadin.ui.*;
 import com.vaadin.ui.renderers.DateRenderer;
 import com.vaadin.ui.renderers.Renderer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 
 import java.util.List;
 
 public class TeacherView extends VerticalLayout implements View {
+
+    private static final Logger logger = LoggerFactory.getLogger(TeacherView.class);
 
     private ApplicationContext ctx;
     private List<Teacher> teachersList;
@@ -26,19 +30,18 @@ public class TeacherView extends VerticalLayout implements View {
     private HorizontalLayout horizontalLayout;
     private TextField filter;
 
-
     public TeacherView() {
+
+        logger.debug("TeacherView constructor invoked;");
 
         ctx = ApplicationContextHolder.getApplicationContext();
         teachersList = ctx.getBean(TeacherService.class).findAll();
         grid = new Grid<>(Teacher.class);
 
-
         showTeacher("");
 
         createFilter();
         filter.addValueChangeListener(e -> showTeacher(e.getValue()));
-
 
         grid.setColumns("lastName", "firstName", "patronymic", "birthDay", "experience", "numberLicense");
 
@@ -46,43 +49,34 @@ public class TeacherView extends VerticalLayout implements View {
 
         setHeight("100%");
         grid.setHeight("100%");
-        grid.setRowHeight(64);
+        grid.setRowHeight(66);
         grid.setWidth("100%");
 
-
-        buttonBild();
+        buttonBuild();
 
         addComponents(filter, grid, pagination, horizontalLayout);
         setExpandRatio(grid, 1);
-
-
     }
 
+    private void buttonBuild() {
 
-    private void buttonBild() {
+        logger.debug("buttonBuild method (TeacherView) invoked;");
 
         horizontalLayout = new HorizontalLayout();
-
 
         Button add = new Button("add in", e -> {
             new TeacherViewEditor(new Teacher(), grid);
         });
 
-
         Button delete = new Button("delete");
-
 
         Button edit = new Button("edit", e -> {
             if (grid.asSingleSelect().getValue() != null) {
                 new TeacherViewEditor(grid.asSingleSelect().getValue(), grid);
             }
         });
-
-
         horizontalLayout.addComponents(add, edit, delete);
-
     }
-
 
     private void createFilter() {
         filter = new TextField();
@@ -91,6 +85,9 @@ public class TeacherView extends VerticalLayout implements View {
     }
 
     private void showTeacher(String name) {
+
+        logger.debug("showTeacher method (TeacherView) invoked; " + name);
+
         if (name.equals("")) {
             createPagination(teachersList);
         } else {
@@ -99,8 +96,9 @@ public class TeacherView extends VerticalLayout implements View {
         }
     }
 
-
     private void createPagination(List<Teacher> list) {
+
+        logger.debug("createPagination method (TeacherView) invoked;" + list);
 
         if (list.size() < 10) {
             grid.setItems(list);

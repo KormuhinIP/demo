@@ -40,6 +40,9 @@ public class LessonViewEditor {
 
 
     public LessonViewEditor(Lesson lesson, Grid grid) {
+
+        logger.debug("LessonViewEditor constructor invoked; " + lesson.getId());
+
         this.lesson = lesson;
         this.grid = grid;
 
@@ -61,24 +64,22 @@ public class LessonViewEditor {
 
         binder = new BeanValidationBinder<>(Lesson.class);
 
-
         DateTimeField dateLesson = new DateTimeField("Date Lesson");
         dateLesson.setValue(lesson.getDateLesson() == null ? null : LocalDateTime.ofInstant(lesson.getDateLesson().toInstant(), ZoneId.systemDefault()));
         dateLesson.setResolution(DateTimeResolution.MINUTE);
         binder.forField(dateLesson).withValidator(new DateTimeRangeValidator("input Date and Time Lesson"
-                , LocalDateTime.now(), LocalDateTime.of(2019, 12, 30, 12, 12)))
-                .withConverter(new LocalDateTimeToDateConverter(ZoneId.systemDefault()))
-                .bind(Lesson::getDateLesson, Lesson::setDateLesson);
+            , LocalDateTime.now(), LocalDateTime.of(2019, 12, 30, 12, 12)))
+            .withConverter(new LocalDateTimeToDateConverter(ZoneId.systemDefault()))
+            .bind(Lesson::getDateLesson, Lesson::setDateLesson);
 
         layout.addComponent(dateLesson);
-
 
         ComboBox<Student> students = new ComboBox<>("Student", listStudents);
         students.setItemCaptionGenerator(Student::getLastName);
         students.setValue(lesson.getStudent());
         students.setEmptySelectionAllowed(false);
         binder.forField(students).withValidator((Validator<Student>) new MyNotNullValidator("choose student"))
-                .bind(Lesson::getStudent, Lesson::setStudent);
+            .bind(Lesson::getStudent, Lesson::setStudent);
         layout.addComponent(students);
 
         ComboBox<Teacher> teachers = new ComboBox<>("Teacher", listTeachers);
@@ -86,7 +87,7 @@ public class LessonViewEditor {
         teachers.setValue(lesson.getTeacher());
         teachers.setEmptySelectionAllowed(false);
         binder.forField(teachers).withValidator((Validator<Teacher>) new MyNotNullValidator("choose teacher"))
-                .bind(Lesson::getTeacher, Lesson::setTeacher);
+            .bind(Lesson::getTeacher, Lesson::setTeacher);
         layout.addComponent(teachers);
 
 
@@ -94,7 +95,7 @@ public class LessonViewEditor {
         layout.addComponent(buttonGPS);
 
 
-        ButtonBild();
+        buttonBuild();
 
         layout.addComponent(hlayout);
         sub.setContent(layout);
@@ -102,8 +103,9 @@ public class LessonViewEditor {
     }
 
 
-    public void ButtonBild() {
+    public void buttonBuild() {
 
+        logger.debug("ButtonBuild method (class LessonViewEditor) invoked");
 
         Button buttonOk = new Button("OK");
         buttonOk.addClickListener(new Button.ClickListener() {
@@ -116,8 +118,8 @@ public class LessonViewEditor {
 
                 } catch (ValidationException e) {
                     Notification.show("Lesson could not be saved, " +
-                            "please check error messages for each field.");
-                    logger.info(e.toString() + getClass().getName());
+                        "please check error messages for each field.");
+                    logger.error(e.toString() + getClass().getName());
                 }
 
                 sub.close();
@@ -141,7 +143,6 @@ public class LessonViewEditor {
         });
 
         hlayout.addComponents(buttonOk, buttonApply, buttonCancel);
-
     }
 
 }

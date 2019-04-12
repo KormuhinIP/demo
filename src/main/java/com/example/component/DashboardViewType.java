@@ -1,6 +1,7 @@
-package com.example.view;
+package com.example.component;
 
 
+import com.example.view.*;
 import com.vaadin.navigator.View;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Resource;

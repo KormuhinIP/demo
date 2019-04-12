@@ -25,9 +25,9 @@ public class PaymentViewEditor {
 
     private static final Logger logger = LoggerFactory.getLogger(PaymentViewEditor.class);
 
-    final FormLayout layout;
-    final HorizontalLayout hlayout;
-    final Window sub;
+    private FormLayout layout;
+    private HorizontalLayout hlayout;
+    private Window sub;
     private BeanValidationBinder<Payment> binder;
     private Payment payment;
     private Grid grid;
@@ -36,18 +36,16 @@ public class PaymentViewEditor {
 
 
     public PaymentViewEditor(Payment payment, Grid grid) {
+
+        logger.debug("PaymentViewEditor constructor invoked; " + payment.getId());
+
         this.payment = payment;
         this.grid = grid;
-
-
         ctx = ApplicationContextHolder.getApplicationContext();
         listStudents = ctx.getBean(StudentService.class).findAll();
-
-
         layout = new FormLayout();
         layout.setMargin(true);
         hlayout = new HorizontalLayout();
-
         sub = new Window("edit/add");
         sub.setHeight("400px");
         sub.setWidth("400px");
@@ -56,7 +54,6 @@ public class PaymentViewEditor {
 
         binder = new BeanValidationBinder<>(Payment.class);
 
-
         ComboBox<Student> students = new ComboBox<>("Student", listStudents);
         students.setItemCaptionGenerator(Student::getLastName);
         students.setValue(payment.getStudent());
@@ -64,7 +61,6 @@ public class PaymentViewEditor {
         binder.forField(students).withValidator((Validator<Student>) new MyNotNullValidator("choose student"))
             .bind(Payment::getStudent, Payment::setStudent);
         layout.addComponent(students);
-
 
         DateField paymentDate = new DateField("Payment Date");
         paymentDate.setValue(payment.getPaymentDate() == null ? null : LocalDate.parse(new SimpleDateFormat("yyyy-MM-dd").format(payment.getPaymentDate())));
@@ -81,7 +77,7 @@ public class PaymentViewEditor {
                 .bind(Payment::getSumPayment, Payment::setSumPayment);
         layout.addComponent(sumPayment);
 
-        ButtonBild();
+        buttonBuild();
 
         layout.addComponent(hlayout);
         sub.setContent(layout);
@@ -89,8 +85,9 @@ public class PaymentViewEditor {
     }
 
 
-    public void ButtonBild() {
+    public void buttonBuild() {
 
+        logger.debug("ButtonBuild method (class PaymentViewEditor) invoked");
 
         Button buttonOk = new Button("OK");
         buttonOk.addClickListener(new Button.ClickListener() {
@@ -104,7 +101,7 @@ public class PaymentViewEditor {
                 } catch (ValidationException e) {
                     Notification.show("Payment could not be saved, " +
                             "please check error messages for each field.");
-                    logger.info(e.toString() + getClass().getName());
+                    logger.error(e.toString() + getClass().getName());
                 }
 
                 sub.close();
@@ -112,20 +109,10 @@ public class PaymentViewEditor {
         });
 
         Button buttonApply = new Button("Apply");
-        buttonApply.addClickListener(new Button.ClickListener() {
-            public void buttonClick(Button.ClickEvent event) {
-
-                sub.close();
-            }
-        });
+        buttonApply.addClickListener((Button.ClickListener) event -> sub.close());
 
         Button buttonCancel = new Button("Cancel");
-        buttonCancel.addClickListener(new Button.ClickListener() {
-            public void buttonClick(Button.ClickEvent event) {
-
-                sub.close();
-            }
-        });
+        buttonCancel.addClickListener((Button.ClickListener) event -> sub.close());
 
         hlayout.addComponents(buttonOk, buttonApply, buttonCancel);
 

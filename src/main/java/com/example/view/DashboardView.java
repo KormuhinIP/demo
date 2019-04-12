@@ -42,6 +42,8 @@ public class DashboardView extends VerticalLayout implements View {
 
     public DashboardView() {
 
+        logger.debug("DashboardView constructor invoked;");
+
         setSizeFull();
         HorizontalLayout layoutOne = new HorizontalLayout();
         layoutOne.setSizeFull();
@@ -57,29 +59,32 @@ public class DashboardView extends VerticalLayout implements View {
 
 
     private Component buildChartStudents() {
+
+        logger.debug("buildChartStudents method (DashboardView) invoked;");
+
         BarChartConfig barConfig = new BarChartConfig();
         barConfig.
-                data()
-                .labels("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December")
-                .addDataset(
-                        new BarDataset().backgroundColor("red").label("Students").yAxisID("y-axis-1"))
-                .and();
+            data()
+            .labels("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December")
+            .addDataset(
+                new BarDataset().backgroundColor("red").label("Students").yAxisID("y-axis-1"))
+            .and();
         barConfig.
-                options()
-                .responsive(true)
-                .hover()
-                .mode(InteractionMode.INDEX)
-                .intersect(true)
-                .animationDuration(400)
-                .and()
-                .title()
-                .display(true)
-                .text("Students")
-                .and()
-                .scales()
-                .add(Axis.Y, new LinearScale().display(true).position(Position.LEFT).id("y-axis-1"))
-                .and()
-                .done();
+            options()
+            .responsive(true)
+            .hover()
+            .mode(InteractionMode.INDEX)
+            .intersect(true)
+            .animationDuration(400)
+            .and()
+            .title()
+            .display(true)
+            .text("Students")
+            .and()
+            .scales()
+            .add(Axis.Y, new LinearScale().display(true).position(Position.LEFT).id("y-axis-1"))
+            .and()
+            .done();
 
         List<String> labels = barConfig.data().getLabels();
         for (Dataset<?, ?> ds : barConfig.data().getDatasets()) {
@@ -99,29 +104,32 @@ public class DashboardView extends VerticalLayout implements View {
 
 
     private Component buildChartTeachers() {
+
+        logger.debug("buildChartTeachers method (DashboardView) invoked;");
+
         BarChartConfig barConfig = new BarChartConfig();
         barConfig.
-                data()
-                .labels("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December")
-                .addDataset(
-                        new BarDataset().backgroundColor("blue").label("Teachers").yAxisID("y-axis-1"))
-                .and();
+            data()
+            .labels("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December")
+            .addDataset(
+                new BarDataset().backgroundColor("blue").label("Teachers").yAxisID("y-axis-1"))
+            .and();
         barConfig.
-                options()
-                .responsive(true)
-                .hover()
-                .mode(InteractionMode.INDEX)
-                .intersect(true)
-                .animationDuration(400)
-                .and()
-                .title()
-                .display(true)
-                .text("Teachers")
-                .and()
-                .scales()
-                .add(Axis.Y, new LinearScale().display(true).position(Position.LEFT).id("y-axis-1"))
-                .and()
-                .done();
+            options()
+            .responsive(true)
+            .hover()
+            .mode(InteractionMode.INDEX)
+            .intersect(true)
+            .animationDuration(400)
+            .and()
+            .title()
+            .display(true)
+            .text("Teachers")
+            .and()
+            .scales()
+            .add(Axis.Y, new LinearScale().display(true).position(Position.LEFT).id("y-axis-1"))
+            .and()
+            .done();
 
         List<String> labels = barConfig.data().getLabels();
         for (Dataset<?, ?> ds : barConfig.data().getDatasets()) {
@@ -140,32 +148,35 @@ public class DashboardView extends VerticalLayout implements View {
     }
 
     public Component buildChartMoney() {
+
+        logger.debug(" buildChartMoney method (DashboardView) invoked;");
+
         LineChartConfig config = new LineChartConfig();
         config.data()
-                .labels("January", "February", "March", "April", "May", "June", "August", "September", "October", "November", "December")
-                .addDataset(new LineDataset().label("Money")
-                        .data()
-                        .fill(false))
-                .and()
-                .options()
-                .responsive(true)
-                .title()
-                .display(true)
-                .text("Chart of Money")
-                .and()
-                .tooltips()
-                .position(Tooltips.PositionMode.NEAREST)
-                .mode(InteractionMode.INDEX)
-                .intersect(false)
-                .yPadding(10)
-                .xPadding(10)
-                .caretSize(8)
-                .caretPadding(10)
-                .backgroundColor("rgba(72, 241, 12, 1)")
-                .borderColor("rgba(0,0,0,1)")
-                .borderWidth(4)
-                .and()
-                .done();
+            .labels("January", "February", "March", "April", "May", "June", "August", "September", "October", "November", "December")
+            .addDataset(new LineDataset().label("Money")
+                .data()
+                .fill(false))
+            .and()
+            .options()
+            .responsive(true)
+            .title()
+            .display(true)
+            .text("Chart of Money")
+            .and()
+            .tooltips()
+            .position(Tooltips.PositionMode.NEAREST)
+            .mode(InteractionMode.INDEX)
+            .intersect(false)
+            .yPadding(10)
+            .xPadding(10)
+            .caretSize(8)
+            .caretPadding(10)
+            .backgroundColor("rgba(72, 241, 12, 1)")
+            .borderColor("rgba(0,0,0,1)")
+            .borderWidth(4)
+            .and()
+            .done();
 
         List<String> labels = config.data().getLabels();
         for (Dataset<?, ?> ds : config.data().getDatasets()) {
@@ -193,6 +204,8 @@ public class DashboardView extends VerticalLayout implements View {
 
     public Component buildTablePayment() {
 
+        logger.debug("buildTablePayment method (DashboardView) invoked;");
+
         paymentsList = ctx.getBean(PaymentService.class).findAll();
         grid = new Grid<>(Payment.class);
         grid.setItems(paymentsList);
@@ -202,8 +215,6 @@ public class DashboardView extends VerticalLayout implements View {
         grid.setWidth(70, Unit.PERCENTAGE);
         return grid;
     }
-
-
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {

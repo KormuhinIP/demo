@@ -35,6 +35,7 @@ public class ExamView extends VerticalLayout implements View {
 
     public ExamView() {
 
+        logger.debug("ExamView constructor invoked;");
 
         ctx = ApplicationContextHolder.getApplicationContext();
         examsList = ctx.getBean(ExamService.class).findAll();
@@ -45,7 +46,7 @@ public class ExamView extends VerticalLayout implements View {
         createFilter();
 
         filter.addValueChangeListener(e ->
-                showStudent(e.getValue() != null ? java.sql.Date.valueOf(e.getValue()) : null));
+            showStudent(e.getValue() != null ? java.sql.Date.valueOf(e.getValue()) : null));
 
 
         grid.setColumns("dateExam", "kindExam", "comment", "evaluation");
@@ -54,20 +55,22 @@ public class ExamView extends VerticalLayout implements View {
 
         setHeight("100%");
         grid.setHeight("100%");
-        grid.setRowHeight(64);
+        grid.setRowHeight(65);
         grid.setWidth("100%");
 
-        buttonBild();
+        buttonBuild();
 
         addComponents(filter, grid, pagination, horizontalLayout);
         setExpandRatio(grid, 1);
-
 
 
     }
 
 
     private void showStudent(Date date) {
+
+        logger.debug("showStudent method (ExamView) invoked; " + date);
+
         if (date == null) {
             createPagination(examsList);
         } else {
@@ -78,12 +81,17 @@ public class ExamView extends VerticalLayout implements View {
 
 
     private void createFilter() {
+
+        logger.debug("createFilter method (ExamView) invoked;");
+
         filter = new DateField();
         filter.setPlaceholder("input date");
     }
 
 
     private void createPagination(List<Exam> list) {
+
+        logger.debug("createPagination method  invoked " + list);
 
         if (list.size() < 10) {
             grid.setItems(list);
@@ -107,7 +115,9 @@ public class ExamView extends VerticalLayout implements View {
     }
 
 
-    private void buttonBild() {
+    private void buttonBuild() {
+
+        logger.debug("buttonBuild method (ExamView) invoked;");
 
         horizontalLayout = new HorizontalLayout();
 

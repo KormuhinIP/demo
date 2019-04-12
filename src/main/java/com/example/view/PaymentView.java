@@ -13,12 +13,15 @@ import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.*;
 import com.vaadin.ui.renderers.DateRenderer;
 import com.vaadin.ui.renderers.Renderer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 
 import java.util.List;
 
 public class PaymentView extends VerticalLayout implements View {
 
+    private static final Logger logger = LoggerFactory.getLogger(PaymentView.class);
 
     private ApplicationContext ctx;
     private List<Payment> paymentsList;
@@ -31,10 +34,11 @@ public class PaymentView extends VerticalLayout implements View {
 
     public PaymentView() {
 
+        logger.debug("PaymentView constructor invoked;");
+
         ctx = ApplicationContextHolder.getApplicationContext();
         paymentsList = ctx.getBean(PaymentService.class).findAll();
         paidStudents = ctx.getBean(PaymentService.class).paidStudents();
-
 
 
         grid = new Grid<>(Payment.class);
@@ -42,7 +46,7 @@ public class PaymentView extends VerticalLayout implements View {
 
         showPayment(null);
 
-        createFilter();
+        createFilter(paidStudents);
         filter.addValueChangeListener(e -> showPayment(e.getValue()));
 
 
@@ -57,13 +61,16 @@ public class PaymentView extends VerticalLayout implements View {
         grid.setWidth("100%");
 
 
-        buttonBild();
+        buttonBuild();
 
         addComponents(filter, grid, pagination, horizontalLayout);
         setExpandRatio(grid, 1);
     }
 
-    private void createFilter() {
+    private void createFilter(List<Student> paidStudents) {
+
+        logger.debug("createFilter method (PaymentView) invoked; " + paidStudents);
+
         filter = new ComboBox<>("Student", paidStudents);
         filter.setPlaceholder("choose student");
         filter.setItemCaptionGenerator(Student::getLastName);
@@ -71,7 +78,11 @@ public class PaymentView extends VerticalLayout implements View {
     }
 
     private void showPayment(Student student) {
+
+        logger.debug("showPayment method (PaymentView) invoked; " + student);
+
         if (student == null) {
+            logger.warn("student=null, exception may occur");
             createPagination(paymentsList);
         } else {
             List<Payment> list = ctx.getBean(PaymentService.class).findPaidStudents(student.getId());
@@ -81,6 +92,8 @@ public class PaymentView extends VerticalLayout implements View {
 
 
     private void createPagination(List<Payment> list) {
+
+        logger.debug("createPagination method  invoked " + list);
 
         if (list.size() < 10) {
             grid.setItems(list);
@@ -104,18 +117,17 @@ public class PaymentView extends VerticalLayout implements View {
     }
 
 
-    private void buttonBild() {
+    private void buttonBuild() {
+
+        logger.debug("buttonBuild method (PaymentView) invoked");
 
         horizontalLayout = new HorizontalLayout();
-
 
         Button add = new Button("add in", e -> {
             new PaymentViewEditor(new Payment(), grid);
         });
 
-
         Button delete = new Button("delete");
-
 
         Button edit = new Button("edit", e -> {
             if (grid.asSingleSelect().getValue() != null) {
@@ -125,9 +137,7 @@ public class PaymentView extends VerticalLayout implements View {
 
 
         horizontalLayout.addComponents(add, edit, delete);
-
     }
-
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {

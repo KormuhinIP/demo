@@ -19,24 +19,25 @@ import java.util.Locale;
 
 @SpringUI
 @Widgetset("AppWidgetset")
-public class VaadinloginUI extends UI {
+public class VaadinUI extends UI {
 
-    private static final Logger logger = LoggerFactory.getLogger(VaadinloginUI.class);
-
+    private static final Logger logger = LoggerFactory.getLogger(VaadinUI.class);
 
     @Override
     protected void init(VaadinRequest vaadinRequest) {
         setLocale(Locale.US);
         updateContent();
-        logger.info("start UI");
-    }
-
-    @WebServlet(value = "/*", asyncSupported = true)
-    // @VaadinServletConfiguration(productionMode = false, ui = VaadinloginUI.class, widgetset = "com.example.view.widgetset.AppWidgetset")
-    public static class Servlet extends VaadinServlet {
+        logger.debug("start UI");
     }
 
     private void updateContent() {
+
+        logger.debug("updateContent method (VaadinUI) invoked; ");
+
         setContent(new LoginView());
+    }
+
+    @WebServlet(value = "/*", asyncSupported = true)
+    public static class Servlet extends VaadinServlet {
     }
 }

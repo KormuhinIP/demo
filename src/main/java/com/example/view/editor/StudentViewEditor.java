@@ -24,31 +24,23 @@ public class StudentViewEditor {
 
     private static final Logger logger = LoggerFactory.getLogger(StudentViewEditor.class);
 
-
-    BeanValidationBinder<Student> binder;
-
-
-    final FormLayout layout;
-    final HorizontalLayout hlayout;
-    final Window sub;
-    Student student;
-    Grid grid;
-    TextField downloadPhotoText;
+    private BeanValidationBinder<Student> binder;
+    private FormLayout layout;
+    private HorizontalLayout hlayout;
+    private Window sub;
+    private Student student;
+    private Grid grid;
+    private TextField downloadPhotoText;
 
     public StudentViewEditor(Student student, Grid grid) {
 
-        logger.info("start " + getClass().getName());
-
+        logger.debug("StudentViewEditor constructor invoked; " + student.getId());
 
         this.student = student;
-
         this.grid = grid;
-
-
         layout = new FormLayout();
         layout.setMargin(true);
         hlayout = new HorizontalLayout();
-
         sub = new Window("edit/add");
         sub.setHeight("500px");
         sub.setWidth("500px");
@@ -88,7 +80,7 @@ public class StudentViewEditor {
         layout.addComponent(patronymicText);
 
         TextField phoneText = new TextField("Phone");
-        phoneText.setValue(student.getPhone() == null ? "" : String.valueOf(student.getPhone()));
+        phoneText.setValue(student.getPhone() == null ? "" : student.getPhone());
         binder.forField(phoneText).withValidator(new RegexpValidator("input phone in the format: +7-917-818-0299",
                 "^^(\\+)([0-9]-[0-9]{3}-[0-9]{3}-[0-9]{4})"))
                 .bind(Student::getPhone, Student::setPhone);
@@ -110,7 +102,7 @@ public class StudentViewEditor {
         binder.bind(licenseSelect, Student::getLicense, Student::setLicense);
         layout.addComponent(licenseSelect);
 
-        ButtonBild();
+        buttonBuild();
 
 
         layout.addComponent(hlayout);
@@ -120,6 +112,9 @@ public class StudentViewEditor {
 
 
     private void fileTree() {
+
+        logger.debug("fileTree method (class StudentViewEditor) invoked");
+
         Panel panel = new Panel();
         Window winTree = new Window();
         VerticalLayout layout = new VerticalLayout();
@@ -152,7 +147,9 @@ public class StudentViewEditor {
         UI.getCurrent().addWindow(winTree);
     }
 
-    public void ButtonBild() {
+    public void buttonBuild() {
+
+        logger.debug("buttonBuild method (class StudentViewEditor) invoked");
 
         Button buttonOk = new Button("OK");
         buttonOk.addClickListener(new Button.ClickListener() {

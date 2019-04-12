@@ -15,11 +15,15 @@ import com.vaadin.ui.*;
 import com.vaadin.ui.renderers.DateRenderer;
 import com.vaadin.ui.renderers.ImageRenderer;
 import com.vaadin.ui.renderers.Renderer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 
 import java.util.List;
 
 public class StudentView extends VerticalLayout implements View {
+
+    private static final Logger logger = LoggerFactory.getLogger(StudentView.class);
 
     private ApplicationContext ctx;
     private List<Student> studentsList;
@@ -31,10 +35,11 @@ public class StudentView extends VerticalLayout implements View {
 
     public StudentView() {
 
+        logger.debug("StudentView constructor invoked;");
+
         ctx = ApplicationContextHolder.getApplicationContext();
         studentsList = ctx.getBean(StudentService.class).findAll();
         grid = new Grid<>(Student.class);
-
 
         showStudent("");
 
@@ -47,67 +52,63 @@ public class StudentView extends VerticalLayout implements View {
         grid.getColumn("birthDay").setRenderer((Renderer) (new DateRenderer("%1$td-%1$tm-%1$tY")));
 
         grid.setColumnOrder(grid.addColumn(p -> new ThemeResource("img/" + p.getPhoto() + ".jpg"),
-                new ImageRenderer()).setCaption("Photo").setWidth(100));
-
+            new ImageRenderer()).setCaption("Photo").setWidth(100));
 
         setHeight("100%");
         grid.setHeight("100%");
         grid.setRowHeight(64);
         grid.setWidth("100%");
 
-
-        buttonBild();
+        buttonBuild();
 
         addComponents(filter, grid, pagination, horizontalLayout);
         setExpandRatio(grid, 1);
-
-
     }
 
+    private void buttonBuild() {
 
-    private void buttonBild() {
+        logger.debug("buttonBuild method (StudentView) invoked;");
 
         horizontalLayout = new HorizontalLayout();
-
 
         Button add = new Button("add in", e -> {
             new StudentViewEditor(new Student(), grid);
         });
 
-
         Button delete = new Button("delete");
-
 
         Button edit = new Button("edit", e -> {
             if (grid.asSingleSelect().getValue() != null) {
                 new StudentViewEditor(grid.asSingleSelect().getValue(), grid);
             }
         });
-
-
         horizontalLayout.addComponents(add, edit, delete);
-
     }
 
-
     private void createFilter() {
+
+        logger.debug("createFilter method (StudentView) invoked;");
+
         filter = new TextField();
         filter.setPlaceholder("input value");
         filter.setValueChangeMode(ValueChangeMode.EAGER);
     }
 
     private void showStudent(String name) {
+
+        logger.debug("showStudent method (StudentView) invoked; " + name);
+
         if (name.equals("")) {
             createPagination(studentsList);
         } else {
             List<Student> list = ctx.getBean(StudentService.class).findByName(name);
             createPagination(list);
         }
-
     }
 
-
     private void createPagination(List<Student> list) {
+
+        logger.debug("createPagination method (StudentView) invoked; " + list);
 
         if (list.size() < 10) {
             grid.setItems(list);
